@@ -7,30 +7,20 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:#f0f2f5;color:#222;line-height:1.6;}
-
-/* ── NAV ── */
 nav{background:#1a1a2e;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
 nav .logo{color:#fff;font-size:17px;font-weight:700;letter-spacing:1px;}
 nav .nav-links a{color:#ccc;text-decoration:none;margin-left:20px;font-size:14px;}
 nav .nav-links a:hover{color:#fff;}
-
-/* ── HERO ── */
 .hero{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:40px 24px;text-align:center;}
 .hero h1{font-size:26px;margin-bottom:8px;}
 .hero p{color:#aaa;font-size:14px;}
-
-/* ── TABS ── */
 .tabs{display:flex;background:#fff;border-bottom:2px solid #e0e0e0;padding:0 24px;overflow-x:auto;}
 .tab-btn{padding:14px 20px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:600;color:#666;border-bottom:3px solid transparent;white-space:nowrap;}
 .tab-btn.active{color:#6C63FF;border-bottom-color:#6C63FF;}
 .tab-btn:hover{color:#6C63FF;}
-
-/* ── CONTENT ── */
 .content{max-width:860px;margin:24px auto;padding:0 16px;}
 .section{display:none;}
 .section.active{display:block;}
-
-/* ── CARDS ── */
 .card{background:#fff;border-radius:12px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
 .card h2{font-size:16px;color:#1a1a2e;margin-bottom:12px;border-left:4px solid #6C63FF;padding-left:10px;}
 .card h3{font-size:14px;color:#444;margin:12px 0 6px;}
@@ -40,47 +30,18 @@ nav .nav-links a:hover{color:#fff;}
 .card table th{background:#f5f5ff;color:#333;font-weight:600;padding:8px 10px;text-align:left;border:1px solid #e0e0e0;}
 .card table td{padding:7px 10px;border:1px solid #e0e0e0;color:#444;}
 .card table tr:nth-child(even) td{background:#fafafa;}
-
-/* ── CODE ── */
 pre{background:#1e1e2e;color:#cdd6f4;padding:14px 16px;border-radius:8px;font-size:12.5px;overflow-x:auto;margin:10px 0;}
 code{font-family:Consolas,monospace;}
-
-.badge{display:inline-block;background:#eeeeff;color:#6C63FF;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;}
 .warn{background:#fff8e1;border-left:4px solid #f9a825;padding:10px 14px;border-radius:6px;font-size:13px;color:#6d4c00;margin:10px 0;}
-
-/* ── FLOATING AI KNOP ── */
-#ai-toggle{
-  position:fixed;bottom:24px;right:24px;
-  width:48px;height:48px;border-radius:50%;
-  background:#1a1a2e;border:none;cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;transition:background 0.2s;
-}
+#ai-toggle{position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:#1a1a2e;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;z-index:1000;transition:background 0.2s;}
 #ai-toggle:hover{background:#16213e;}
 #ai-toggle svg{width:22px;height:22px;fill:#fff;}
-
-/* ── AI PANEL ── */
-#ai-panel{
-  position:fixed;bottom:82px;right:24px;
-  width:340px;max-height:480px;
-  background:#fff;border-radius:14px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.15);
-  display:none;flex-direction:column;
-  z-index:999;overflow:hidden;
-}
+#ai-panel{position:fixed;bottom:82px;right:24px;width:340px;max-height:480px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.15);display:none;flex-direction:column;z-index:999;overflow:hidden;}
 #ai-panel.open{display:flex;}
-
-#ai-header{
-  background:#1a1a2e;padding:12px 16px;
-  color:#fff;font-size:14px;font-weight:600;
-  display:flex;justify-content:space-between;align-items:center;
-}
+#ai-header{background:#1a1a2e;padding:12px 16px;color:#fff;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
 #ai-header button{background:none;border:none;color:#aaa;cursor:pointer;font-size:18px;line-height:1;}
 #ai-header button:hover{color:#fff;}
-
 #ai-chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9f9f9;}
-
 .ai-msg{display:flex;gap:7px;align-items:flex-start;}
 .ai-msg.user{flex-direction:row-reverse;}
 .ai-avatar{width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
@@ -90,7 +51,6 @@ code{font-family:Consolas,monospace;}
 .ai-bubble.bot{background:#efefef;border-radius:0 10px 10px 10px;}
 .ai-bubble.usr{background:#e0f7ef;border-radius:10px 0 10px 10px;}
 .typing-dot{font-size:12px;color:#999;padding:4px 8px;}
-
 #ai-input-row{display:flex;gap:6px;padding:10px 12px;border-top:1px solid #eee;background:#fff;}
 #ai-input{flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:20px;font-size:13px;outline:none;}
 #ai-input:focus{border-color:#6C63FF;}
@@ -122,10 +82,7 @@ code{font-family:Consolas,monospace;}
 </div>
 
 <div class="content">
-
-  <!-- ══════════ NETWERK TAB ══════════ -->
   <div id="tab-netwerk" class="section active">
-
     <div class="card">
       <h2>Overzicht Arnhem</h2>
       <table>
@@ -136,7 +93,6 @@ code{font-family:Consolas,monospace;}
         <tr><td>Access Switches</td><td>SW01-ARN (VLAN 30) · SW02-ARN (VLAN 40)</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h2>IP-Plan</h2>
       <table>
@@ -151,7 +107,6 @@ code{font-family:Consolas,monospace;}
         <tr><td>Printer0</td><td>Wireless0</td><td>10.10.40.60</td><td>255.255.255.0</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h2>VLAN-overzicht</h2>
       <table>
@@ -162,7 +117,6 @@ code{font-family:Consolas,monospace;}
       </table>
       <div class="warn">⚠ Trunk SW01-ARN (Fa0/24) ↔ SW02-ARN (Fa0/23) is verplicht!</div>
     </div>
-
     <div class="card">
       <h2>Configuratie Core01_ARN</h2>
       <h3>Stap 1 – VTP & VLAN</h3>
@@ -175,7 +129,6 @@ vlan 40
  name Marketing
 vlan 50
  name Gasten_Wifi</code></pre>
-
       <h3>Stap 2 – SVI's (Inter-VLAN Routing)</h3>
       <div class="warn">⚠ Altijd <strong>no shutdown</strong> toevoegen — interfaces zijn standaard down!</div>
       <pre><code>ip routing
@@ -192,7 +145,6 @@ interface Vlan40
 interface Vlan50
  ip address 10.10.50.1 255.255.255.0
  no shutdown</code></pre>
-
       <h3>Stap 3 – DHCP</h3>
       <pre><code>ip dhcp excluded-address 10.10.30.1 10.10.30.50
 ip dhcp excluded-address 10.10.40.1 10.10.40.50
@@ -212,14 +164,12 @@ ip dhcp pool vlan50
  network 10.10.50.0 255.255.255.0
  default-router 10.10.50.1
  dns-server 62.36.55.85</code></pre>
-
       <h3>Stap 4 – OSPF & Default Route</h3>
       <pre><code>router ospf 1
  network 10.0.0.0 0.255.255.255 area 0
 exit
 
 ip route 0.0.0.0 0.0.0.0 10.10.0.1</code></pre>
-
       <h3>Stap 5 – Spanning Tree & Trunks</h3>
       <pre><code>spanning-tree vlan 1,30,40,50 priority 4096
 
@@ -231,7 +181,6 @@ exit
 interface FastEthernet0/24
  switchport mode access
  switchport access vlan 50</code></pre>
-
       <h3>Stap 6 – ACL 150 (Gasten beveiliging)</h3>
       <pre><code>ip access-list extended 150
  deny ip 10.10.50.0 0.0.0.255 10.10.30.0 0.0.0.255
@@ -244,7 +193,6 @@ interface FastEthernet0/24
 interface Vlan50
  ip access-group 150 in</code></pre>
     </div>
-
     <div class="card">
       <h2>WiFi</h2>
       <table>
@@ -253,43 +201,35 @@ interface Vlan50
         <tr><td>AP_Gast (VLAN 50)</td><td>Solar_gast</td><td>WPA2-PSK</td><td>welkom123</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h2>Verificatie commando's</h2>
-      <pre><code>ipconfig /renew          ! DHCP testen op PC
-show ip ospf neighbor    ! OSPF status (moet FULL zijn)
-ping 10.10.40.60         ! Printer bereikbaarheid
-show vlan brief          ! VLAN overzicht</code></pre>
+      <pre><code>ipconfig /renew
+show ip ospf neighbor
+ping 10.10.40.60
+show vlan brief</code></pre>
     </div>
   </div>
 
-  <!-- ══════════ PYTHON TAB ══════════ -->
   <div id="tab-python" class="section">
-
     <div class="card">
       <h2>Basisconcepten</h2>
-      <h3>Variabelen & datatypes</h3>
       <pre><code>naam = "Alice"        # str
 leeftijd = 20         # int
 gemiddelde = 8.5      # float
 geslaagd = True       # bool
 scores = [6, 7, 9]    # list
-info = {"naam": "Alice", "leeftijd": 20}  # dict</code></pre>
+info = {"naam": "Alice", "leeftijd": 20}  # dict
 
-      <h3>Input & output</h3>
-      <pre><code>naam = input("Wat is je naam? ")
-print(f"Hallo, {naam}!")</code></pre>
+naam = input("Wat is je naam? ")
+print(f"Hallo, {naam}!")
 
-      <h3>Type conversie</h3>
-      <pre><code>getal = int(input("Getal: "))   # str → int
-tekst = str(42)                 # int → str
-komma = float("3.14")           # str → float</code></pre>
+getal = int(input("Getal: "))
+tekst = str(42)
+komma = float("3.14")</code></pre>
     </div>
-
     <div class="card">
       <h2>Condities</h2>
       <pre><code>cijfer = 7
-
 if cijfer >= 5.5:
     print("Geslaagd")
 elif cijfer >= 4:
@@ -297,117 +237,66 @@ elif cijfer >= 4:
 else:
     print("Onvoldoende")</code></pre>
     </div>
-
     <div class="card">
       <h2>Loops</h2>
-      <h3>For loop</h3>
-      <pre><code>for i in range(5):        # 0 t/m 4
+      <pre><code>for i in range(5):
     print(i)
 
-for getal in [2, 4, 6]:
-    print(getal * 2)</code></pre>
-
-      <h3>While loop</h3>
-      <pre><code>teller = 0
+teller = 0
 while teller < 5:
     print(teller)
-    teller += 1</code></pre>
+    teller += 1
 
-      <h3>Break & continue</h3>
-      <pre><code>for i in range(10):
+for i in range(10):
     if i == 5:
-        break       # stopt de loop
+        break
     if i % 2 == 0:
-        continue    # sla even getallen over
+        continue
     print(i)</code></pre>
     </div>
-
     <div class="card">
       <h2>Functies</h2>
       <pre><code>def bereken_bmi(gewicht, lengte):
     bmi = gewicht / (lengte ** 2)
     return round(bmi, 1)
 
-resultaat = bereken_bmi(70, 1.75)
-print(resultaat)  # 22.9</code></pre>
-
-      <h3>Default parameters</h3>
-      <pre><code>def begroet(naam, begroeting="Hallo"):
-    print(f"{begroeting}, {naam}!")
-
-begroet("Jan")              # Hallo, Jan!
-begroet("Jan", "Goedemorgen")  # Goedemorgen, Jan!</code></pre>
+def begroet(naam, begroeting="Hallo"):
+    print(f"{begroeting}, {naam}!")</code></pre>
     </div>
-
     <div class="card">
-      <h2>Lists & bewerkingen</h2>
+      <h2>Lists & Dictionaries</h2>
       <pre><code>scores = [6, 8, 5, 9, 7]
-
-scores.append(10)       # toevoegen achteraan
-scores.remove(5)        # verwijder eerste 5
-scores.sort()           # sorteren
-scores.sort(reverse=True)  # omgekeerd sorteren
-
-print(len(scores))      # aantal elementen
-print(sum(scores))      # optelling
-print(min(scores))      # laagste
-print(max(scores))      # hoogste
-
-# List comprehension
+scores.append(10)
+scores.sort()
+print(len(scores), sum(scores), min(scores), max(scores))
 kwadraten = [x**2 for x in range(1, 6)]
-# [1, 4, 9, 16, 25]</code></pre>
-    </div>
 
-    <div class="card">
-      <h2>Dictionaries</h2>
-      <pre><code>student = {
-    "naam": "Lisa",
-    "leeftijd": 19,
-    "cijfers": [7, 8, 6]
-}
-
-print(student["naam"])          # Lisa
-student["stad"] = "Arnhem"      # toevoegen
-del student["leeftijd"]         # verwijderen
-
+student = {"naam": "Lisa", "leeftijd": 19}
+student["stad"] = "Arnhem"
 for sleutel, waarde in student.items():
     print(f"{sleutel}: {waarde}")</code></pre>
     </div>
-
     <div class="card">
-      <h2>Bestanden lezen/schrijven</h2>
-      <pre><code># Schrijven
-with open("data.txt", "w") as f:
+      <h2>Bestanden & Foutafhandeling</h2>
+      <pre><code>with open("data.txt", "w") as f:
     f.write("Regel 1\n")
-    f.write("Regel 2\n")
 
-# Lezen
-with open("data.txt", "r") as f:
-    inhoud = f.read()
-    print(inhoud)
-
-# Regel voor regel
 with open("data.txt", "r") as f:
     for regel in f:
-        print(regel.strip())</code></pre>
-    </div>
+        print(regel.strip())
 
-    <div class="card">
-      <h2>Foutafhandeling</h2>
-      <pre><code>try:
+try:
     getal = int(input("Getal: "))
-    resultaat = 10 / getal
-    print(resultaat)
+    print(10 / getal)
 except ValueError:
     print("Geen geldig getal!")
 except ZeroDivisionError:
-    print("Delen door nul niet mogelijk!")
+    print("Delen door nul!")
 finally:
     print("Klaar.")</code></pre>
     </div>
-
     <div class="card">
-      <h2>Klassen & objecten</h2>
+      <h2>Klassen</h2>
       <pre><code>class Student:
     def __init__(self, naam, leeftijd):
         self.naam = naam
@@ -416,185 +305,86 @@ finally:
     def stel_voor(self):
         print(f"Ik ben {self.naam}, {self.leeftijd} jaar.")
 
-    def __str__(self):
-        return f"Student({self.naam})"
-
 s = Student("Tim", 20)
-s.stel_voor()
-print(s)   # Student(Tim)</code></pre>
+s.stel_voor()</code></pre>
     </div>
   </div>
 
-  <!-- ══════════ SQL TAB ══════════ -->
   <div id="tab-sql" class="section">
-
     <div class="card">
-      <h2>Basis SELECT</h2>
-      <pre><code>-- Alle kolommen
-SELECT * FROM klanten;
-
--- Specifieke kolommen
+      <h2>SELECT & WHERE</h2>
+      <pre><code>SELECT * FROM klanten;
 SELECT naam, email FROM klanten;
+SELECT DISTINCT stad FROM klanten;
 
--- Met alias
-SELECT naam AS klantnaam, email AS mailadres FROM klanten;
-
--- Unieke waarden
-SELECT DISTINCT stad FROM klanten;</code></pre>
-    </div>
-
-    <div class="card">
-      <h2>WHERE – Filteren</h2>
-      <pre><code>SELECT * FROM klanten WHERE stad = 'Arnhem';
-SELECT * FROM bestellingen WHERE bedrag > 100;
+SELECT * FROM klanten WHERE stad = 'Arnhem';
 SELECT * FROM klanten WHERE leeftijd BETWEEN 18 AND 30;
-SELECT * FROM klanten WHERE naam LIKE 'J%';     -- begint met J
-SELECT * FROM klanten WHERE naam LIKE '%sen';   -- eindigt op sen
+SELECT * FROM klanten WHERE naam LIKE 'J%';
 SELECT * FROM producten WHERE categorie IN ('Elektronica', 'Kleding');
-SELECT * FROM klanten WHERE email IS NULL;
-SELECT * FROM klanten WHERE email IS NOT NULL;</code></pre>
+SELECT * FROM klanten WHERE email IS NULL;</code></pre>
     </div>
-
     <div class="card">
-      <h2>ORDER BY & LIMIT</h2>
-      <pre><code>SELECT * FROM producten ORDER BY prijs ASC;     -- laag → hoog
-SELECT * FROM producten ORDER BY prijs DESC;    -- hoog → laag
-SELECT * FROM klanten ORDER BY naam ASC LIMIT 10;  -- eerste 10</code></pre>
-    </div>
+      <h2>ORDER BY, LIMIT & Aggregaties</h2>
+      <pre><code>SELECT * FROM producten ORDER BY prijs ASC;
+SELECT * FROM producten ORDER BY prijs DESC;
+SELECT * FROM klanten ORDER BY naam ASC LIMIT 10;
 
-    <div class="card">
-      <h2>Aggregatiefuncties</h2>
-      <pre><code>SELECT COUNT(*) FROM bestellingen;
-SELECT COUNT(DISTINCT klant_id) FROM bestellingen;
+SELECT COUNT(*) FROM bestellingen;
 SELECT SUM(bedrag) FROM bestellingen;
 SELECT AVG(bedrag) FROM bestellingen;
-SELECT MIN(prijs) FROM producten;
-SELECT MAX(prijs) FROM producten;</code></pre>
+SELECT MIN(prijs), MAX(prijs) FROM producten;</code></pre>
     </div>
-
     <div class="card">
       <h2>GROUP BY & HAVING</h2>
-      <pre><code>-- Aantal bestellingen per klant
-SELECT klant_id, COUNT(*) AS aantal
-FROM bestellingen
-GROUP BY klant_id;
-
--- Totaal per categorie
-SELECT categorie, SUM(prijs) AS totaal
-FROM producten
-GROUP BY categorie;
-
--- HAVING = filter op groep (niet WHERE!)
-SELECT klant_id, COUNT(*) AS aantal
+      <pre><code>SELECT klant_id, COUNT(*) AS aantal
 FROM bestellingen
 GROUP BY klant_id
 HAVING COUNT(*) > 5;</code></pre>
     </div>
-
     <div class="card">
       <h2>JOIN's</h2>
-      <pre><code>-- INNER JOIN: alleen overeenkomende rijen
-SELECT k.naam, b.bedrag
+      <pre><code>SELECT k.naam, b.bedrag
 FROM klanten k
 INNER JOIN bestellingen b ON k.id = b.klant_id;
 
--- LEFT JOIN: alle klanten, ook zonder bestelling
 SELECT k.naam, b.bedrag
 FROM klanten k
-LEFT JOIN bestellingen b ON k.id = b.klant_id;
-
--- RIGHT JOIN: alle bestellingen, ook zonder klant
-SELECT k.naam, b.bedrag
-FROM klanten k
-RIGHT JOIN bestellingen b ON k.id = b.klant_id;
-
--- Meerdere joins
-SELECT k.naam, p.naam AS product, b.datum
-FROM klanten k
-JOIN bestellingen b ON k.id = b.klant_id
-JOIN producten p ON b.product_id = p.id;</code></pre>
+LEFT JOIN bestellingen b ON k.id = b.klant_id;</code></pre>
     </div>
-
     <div class="card">
       <h2>INSERT, UPDATE, DELETE</h2>
-      <pre><code>-- Toevoegen
-INSERT INTO klanten (naam, email, stad)
+      <pre><code>INSERT INTO klanten (naam, email, stad)
 VALUES ('Jan de Vries', 'jan@email.nl', 'Arnhem');
 
--- Wijzigen
-UPDATE klanten
-SET stad = 'Nijmegen'
-WHERE id = 5;
-
--- Verwijderen
-DELETE FROM klanten
-WHERE id = 5;</code></pre>
-      <div class="warn">⚠ Altijd WHERE gebruiken bij UPDATE en DELETE, anders wijzig/verwijder je ALLES!</div>
+UPDATE klanten SET stad = 'Nijmegen' WHERE id = 5;
+DELETE FROM klanten WHERE id = 5;</code></pre>
+      <div class="warn">⚠ Altijd WHERE gebruiken bij UPDATE en DELETE!</div>
     </div>
-
     <div class="card">
-      <h2>Subquery's</h2>
-      <pre><code>-- Klanten met bestellingen boven gemiddelde
-SELECT naam FROM klanten
-WHERE id IN (
-    SELECT klant_id FROM bestellingen
-    WHERE bedrag > (SELECT AVG(bedrag) FROM bestellingen)
-);
-
--- In FROM (afgeleide tabel)
-SELECT gem.stad, gem.gemiddeld_bedrag
-FROM (
-    SELECT k.stad, AVG(b.bedrag) AS gemiddeld_bedrag
-    FROM klanten k
-    JOIN bestellingen b ON k.id = b.klant_id
-    GROUP BY k.stad
-) AS gem
-WHERE gem.gemiddeld_bedrag > 50;</code></pre>
-    </div>
-
-    <div class="card">
-      <h2>Tabellen aanmaken</h2>
+      <h2>Tabellen & tips</h2>
       <pre><code>CREATE TABLE studenten (
-    id          INT PRIMARY KEY AUTO_INCREMENT,
-    naam        VARCHAR(100) NOT NULL,
-    email       VARCHAR(150) UNIQUE,
-    leeftijd    INT,
-    inschrijf   DATE DEFAULT CURRENT_DATE
+    id       INT PRIMARY KEY AUTO_INCREMENT,
+    naam     VARCHAR(100) NOT NULL,
+    email    VARCHAR(150) UNIQUE,
+    leeftijd INT
 );
-
--- Tabel verwijderen
-DROP TABLE IF EXISTS studenten;
-
--- Kolom toevoegen
 ALTER TABLE studenten ADD COLUMN stad VARCHAR(50);
-
--- Kolom verwijderen
-ALTER TABLE studenten DROP COLUMN stad;</code></pre>
-    </div>
-
-    <div class="card">
-      <h2>Handige tips voor het examen</h2>
+DROP TABLE IF EXISTS studenten;</code></pre>
       <ul>
-        <li>Volgorde: <strong>SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT</strong></li>
-        <li>WHERE werkt op rijen, HAVING werkt op groepen</li>
-        <li>INNER JOIN = alleen matches, LEFT JOIN = alles links</li>
-        <li>Aggregaties (SUM, COUNT etc.) altijd met GROUP BY als je per groep wilt</li>
-        <li>Gebruik aliassen (AS) voor leesbaarheid</li>
+        <li>Volgorde: SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT</li>
+        <li>WHERE op rijen, HAVING op groepen</li>
         <li>NULL vergelijk je met IS NULL, nooit met = NULL</li>
       </ul>
     </div>
   </div>
+</div>
 
-</div><!-- /content -->
-
-<!-- ── FLOATING AI KNOP (subtiel) ── -->
 <button id="ai-toggle" onclick="toggleAI()" title="Hulp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
   </svg>
 </button>
 
-<!-- ── AI PANEL ── -->
 <div id="ai-panel">
   <div id="ai-header">
     <span>Studieassistent</span>
@@ -603,7 +393,7 @@ ALTER TABLE studenten DROP COLUMN stad;</code></pre>
   <div id="ai-chat">
     <div class="ai-msg">
       <div class="ai-avatar bot">S</div>
-      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL. Ik help je met de examenstof.</div>
+      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL.</div>
     </div>
   </div>
   <div id="ai-input-row">
@@ -613,17 +403,9 @@ ALTER TABLE studenten DROP COLUMN stad;</code></pre>
 </div>
 
 <script>
-// ===================================================
-// VERVANG HIERONDER JOUW ANTHROPIC API KEY
 const API_KEY = "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";
-// ===================================================
 
-const SYSTEM = `Je bent een studieassistent voor een ICT-examen. De student studeert voor:
-1. Netwerkconfiguratie (Cisco, VLAN, OSPF, DHCP, ACL) - Solar Plex Arnhem filiaal
-2. Python programmeren (loops, functies, klassen, bestanden, foutafhandeling)
-3. SQL (SELECT, JOIN, GROUP BY, subqueries, DDL)
-
-Geef korte, duidelijke antwoorden. Gebruik voorbeelden. Antwoord altijd in het Nederlands.`;
+const SYSTEM = `Je bent een studieassistent voor een ICT-examen over netwerken (Cisco/VLAN/OSPF), Python en SQL. Antwoord kort en in het Nederlands.`;
 
 const history = [];
 
@@ -637,9 +419,7 @@ function showTab(tab) {
 function toggleAI() {
   const panel = document.getElementById('ai-panel');
   panel.classList.toggle('open');
-  if (panel.classList.contains('open')) {
-    document.getElementById('ai-input').focus();
-  }
+  if (panel.classList.contains('open')) document.getElementById('ai-input').focus();
 }
 
 function addMsg(text, role) {
@@ -656,17 +436,13 @@ function addMsg(text, role) {
   wrap.appendChild(bubble);
   chat.appendChild(wrap);
   chat.scrollTop = chat.scrollHeight;
-  return bubble;
 }
 
 function showTyping() {
   const chat = document.getElementById('ai-chat');
   const t = document.createElement('div');
-  t.className = 'typing-dot';
-  t.id = 'typing';
-  t.textContent = 'Aan het denken...';
-  chat.appendChild(t);
-  chat.scrollTop = chat.scrollHeight;
+  t.className = 'typing-dot'; t.id = 'typing'; t.textContent = 'Aan het denken...';
+  chat.appendChild(t); chat.scrollTop = chat.scrollHeight;
 }
 
 function removeTyping() {
@@ -679,13 +455,10 @@ async function askAI() {
   const btn = document.getElementById('ai-send');
   const text = input.value.trim();
   if (!text) return;
-
-  input.value = '';
-  btn.disabled = true;
+  input.value = ''; btn.disabled = true;
   addMsg(text, 'user');
   history.push({ role: 'user', content: text });
   showTyping();
-
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -708,12 +481,14 @@ async function askAI() {
       const reply = data.content[0].text;
       addMsg(reply, 'bot');
       history.push({ role: 'assistant', content: reply });
+    } else if (data.error) {
+      addMsg('Fout: ' + data.error.type + ' – ' + data.error.message, 'bot');
     } else {
-      addMsg('Er ging iets mis. Controleer je API key.', 'bot');
+      addMsg('Onbekende fout: ' + JSON.stringify(data), 'bot');
     }
   } catch(e) {
     removeTyping();
-    addMsg('Verbindingsfout. Controleer je API key.', 'bot');
+    addMsg('Verbindingsfout: ' + e.message, 'bot');
   }
   btn.disabled = false;
   input.focus();
