@@ -504,7 +504,7 @@ function formatResponse(text) {
 
   const copyBtn = document.createElement('button');
   copyBtn.textContent = '📋 Kopieer';
-  copyBtn.style.cssText = 'display:block;margin:6px 0 0 auto;background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.8;';
+  copyBtn.style.cssText = 'display:block;margin:6px auto 0 0;background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.8;';
   copyBtn.onclick = () => {
     navigator.clipboard.writeText(text);
     copyBtn.textContent = '✓ Gekopieerd!';
