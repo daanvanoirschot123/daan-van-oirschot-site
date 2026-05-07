@@ -9,8 +9,11 @@
 body{font-family:Arial,sans-serif;background:#f0f2f5;color:#222;line-height:1.6;}
 nav{background:#1a1a2e;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
 nav .logo{color:#fff;font-size:17px;font-weight:700;letter-spacing:1px;}
-nav .nav-links a{color:#ccc;text-decoration:none;margin-left:20px;font-size:14px;}
+nav .nav-links{display:flex;align-items:center;gap:20px;}
+nav .nav-links a{color:#ccc;text-decoration:none;font-size:14px;}
 nav .nav-links a:hover{color:#fff;}
+#ai-nav-btn{background:none;border:1px solid rgba(255,255,255,0.2);color:#ccc;padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;}
+#ai-nav-btn:hover{background:rgba(255,255,255,0.1);color:#fff;}
 .hero{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:40px 24px;text-align:center;}
 .hero h1{font-size:26px;margin-bottom:8px;}
 .hero p{color:#aaa;font-size:14px;}
@@ -33,10 +36,7 @@ nav .nav-links a:hover{color:#fff;}
 pre{background:#1e1e2e;color:#cdd6f4;padding:14px 16px;border-radius:8px;font-size:12.5px;overflow-x:auto;margin:10px 0;}
 code{font-family:Consolas,monospace;}
 .warn{background:#fff8e1;border-left:4px solid #f9a825;padding:10px 14px;border-radius:6px;font-size:13px;color:#6d4c00;margin:10px 0;}
-#ai-toggle{position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:#1a1a2e;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;z-index:1000;transition:background 0.2s;}
-#ai-toggle:hover{background:#16213e;}
-#ai-toggle svg{width:22px;height:22px;fill:#fff;}
-#ai-panel{position:fixed;bottom:82px;right:24px;width:340px;max-height:480px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.15);display:none;flex-direction:column;z-index:999;overflow:hidden;}
+#ai-panel{position:fixed;top:52px;right:16px;width:400px;max-height:580px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
 #ai-panel.open{display:flex;}
 #ai-header{background:#1a1a2e;padding:12px 16px;color:#fff;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
 #ai-header button{background:none;border:none;color:#aaa;cursor:pointer;font-size:18px;line-height:1;}
@@ -47,14 +47,26 @@ code{font-family:Consolas,monospace;}
 .ai-avatar{width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
 .ai-avatar.bot{background:#6C63FF;}
 .ai-avatar.usr{background:#1D9E75;}
-.ai-bubble{max-width:82%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;color:#222;}
+.ai-bubble{max-width:85%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.6;color:#222;}
 .ai-bubble.bot{background:#efefef;border-radius:0 10px 10px 10px;}
 .ai-bubble.usr{background:#e0f7ef;border-radius:10px 0 10px 10px;}
+.ai-bubble pre{background:#1e1e2e;color:#cdd6f4;padding:10px 12px;border-radius:6px;font-size:12px;overflow-x:auto;margin:6px 0;white-space:pre;}
+.ai-bubble code{font-family:Consolas,monospace;font-size:12px;}
+.ai-bubble p{margin-bottom:6px;}
+.ai-bubble p:last-child{margin-bottom:0;}
 .typing-dot{font-size:12px;color:#999;padding:4px 8px;}
-#ai-input-row{display:flex;gap:6px;padding:10px 12px;border-top:1px solid #eee;background:#fff;}
+#ai-input-area{background:#fff;border-top:1px solid #eee;}
+#file-preview{padding:6px 12px;display:none;flex-wrap:wrap;gap:6px;background:#f0f0ff;}
+.file-tag{display:flex;align-items:center;gap:4px;background:#e0e0ff;border-radius:20px;padding:3px 10px;font-size:12px;color:#333;}
+.file-tag button{background:none;border:none;cursor:pointer;color:#999;font-size:14px;line-height:1;padding:0;}
+.file-tag button:hover{color:#e00;}
+#ai-input-row{display:flex;gap:6px;padding:10px 12px;align-items:center;}
 #ai-input{flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:20px;font-size:13px;outline:none;}
 #ai-input:focus{border-color:#6C63FF;}
-#ai-send{padding:8px 14px;background:#6C63FF;color:#fff;border:none;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;}
+#upload-btn{background:none;border:none;cursor:pointer;padding:6px;color:#888;font-size:18px;line-height:1;flex-shrink:0;}
+#upload-btn:hover{color:#6C63FF;}
+#file-input{display:none;}
+#ai-send{padding:8px 14px;background:#6C63FF;color:#fff;border:none;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;flex-shrink:0;}
 #ai-send:hover{background:#5A52E0;}
 #ai-send:disabled{background:#bbb;cursor:not-allowed;}
 </style>
@@ -67,8 +79,31 @@ code{font-family:Consolas,monospace;}
     <a href="#">Home</a>
     <a href="#">Documenten</a>
     <a href="#">Contact</a>
+    <button id="ai-nav-btn" onclick="toggleAI()">Studieassistent</button>
   </div>
 </nav>
+
+<div id="ai-panel">
+  <div id="ai-header">
+    <span>Studieassistent</span>
+    <button onclick="toggleAI()">×</button>
+  </div>
+  <div id="ai-chat">
+    <div class="ai-msg">
+      <div class="ai-avatar bot">S</div>
+      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL. Je kunt meerdere bestanden tegelijk uploaden via 📎!</div>
+    </div>
+  </div>
+  <div id="ai-input-area">
+    <div id="file-preview"></div>
+    <div id="ai-input-row">
+      <button id="upload-btn" onclick="document.getElementById('file-input').click()" title="Bestanden uploaden">📎</button>
+      <input type="file" id="file-input" accept=".txt,.py,.sql,.md,.csv,.png,.jpg,.jpeg,.gif" multiple onchange="handleFiles(event)"/>
+      <input type="text" id="ai-input" placeholder="Stel een vraag..." />
+      <button id="ai-send" onclick="askAI()">→</button>
+    </div>
+  </div>
+</div>
 
 <div class="hero">
   <h1>Studiegids – Examen Voorbereiding</h1>
@@ -379,35 +414,20 @@ DROP TABLE IF EXISTS studenten;</code></pre>
   </div>
 </div>
 
-<button id="ai-toggle" onclick="toggleAI()" title="Hulp">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
-  </svg>
-</button>
-
-<div id="ai-panel">
-  <div id="ai-header">
-    <span>Studieassistent</span>
-    <button onclick="toggleAI()">×</button>
-  </div>
-  <div id="ai-chat">
-    <div class="ai-msg">
-      <div class="ai-avatar bot">S</div>
-      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL.</div>
-    </div>
-  </div>
-  <div id="ai-input-row">
-    <input type="text" id="ai-input" placeholder="Stel een vraag..." />
-    <button id="ai-send" onclick="askAI()">→</button>
-  </div>
-</div>
-
 <script>
 const API_URL = "https://daan-van-oirschot-site.vercel.app/api/chat";
 
-const SYSTEM = `Je bent een studieassistent voor een ICT-examen over netwerken (Cisco/VLAN/OSPF), Python en SQL. Antwoord kort en in het Nederlands.`;
+const SYSTEM = `Je bent een studieassistent voor een ICT-examen over netwerken (Cisco/VLAN/OSPF), Python en SQL.
+Antwoord altijd in het Nederlands.
+Als je code geeft, zet die dan altijd tussen driedubbele backticks met python of sql erbij, bijvoorbeeld:
+\`\`\`python
+code hier
+\`\`\`
+Geef altijd een korte uitleg boven de code, en een korte toelichting eronder.
+Als de gebruiker bestanden uploadt, analyseer de inhoud en geef gerichte feedback of uitleg.`;
 
 const history = [];
+let pendingFiles = [];
 
 function showTab(tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -422,6 +442,63 @@ function toggleAI() {
   if (panel.classList.contains('open')) document.getElementById('ai-input').focus();
 }
 
+function handleFiles(event) {
+  const files = Array.from(event.target.files);
+  files.forEach(file => {
+    if (!pendingFiles.find(f => f.name === file.name)) {
+      pendingFiles.push(file);
+    }
+  });
+  renderFilePreviews();
+  event.target.value = '';
+}
+
+function renderFilePreviews() {
+  const preview = document.getElementById('file-preview');
+  preview.innerHTML = '';
+  if (pendingFiles.length === 0) {
+    preview.style.display = 'none';
+    return;
+  }
+  preview.style.display = 'flex';
+  pendingFiles.forEach((file, i) => {
+    const tag = document.createElement('div');
+    tag.className = 'file-tag';
+    tag.innerHTML = `📄 ${file.name} <button onclick="removeFile(${i})">×</button>`;
+    preview.appendChild(tag);
+  });
+}
+
+function removeFile(index) {
+  pendingFiles.splice(index, 1);
+  renderFilePreviews();
+}
+
+function formatResponse(text) {
+  const div = document.createElement('div');
+  div.className = 'ai-bubble bot';
+  const parts = text.split(/(```[\s\S]*?```)/g);
+  parts.forEach(part => {
+    if (part.startsWith('```')) {
+      const lines = part.replace(/```(\w+)?/, '').replace(/```$/, '').trim();
+      const pre = document.createElement('pre');
+      const code = document.createElement('code');
+      code.textContent = lines;
+      pre.appendChild(code);
+      div.appendChild(pre);
+    } else if (part.trim()) {
+      part.trim().split('\n').forEach(line => {
+        if (line.trim()) {
+          const p = document.createElement('p');
+          p.textContent = line;
+          div.appendChild(p);
+        }
+      });
+    }
+  });
+  return div;
+}
+
 function addMsg(text, role) {
   const chat = document.getElementById('ai-chat');
   const wrap = document.createElement('div');
@@ -429,9 +506,14 @@ function addMsg(text, role) {
   const av = document.createElement('div');
   av.className = 'ai-avatar ' + (role === 'user' ? 'usr' : 'bot');
   av.textContent = role === 'user' ? 'Jij' : 'S';
-  const bubble = document.createElement('div');
-  bubble.className = 'ai-bubble ' + (role === 'user' ? 'usr' : 'bot');
-  bubble.textContent = text;
+  let bubble;
+  if (role === 'bot') {
+    bubble = formatResponse(text);
+  } else {
+    bubble = document.createElement('div');
+    bubble.className = 'ai-bubble usr';
+    bubble.textContent = text;
+  }
   wrap.appendChild(av);
   wrap.appendChild(bubble);
   chat.appendChild(wrap);
@@ -450,16 +532,71 @@ function removeTyping() {
   if (t) t.remove();
 }
 
+async function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
 async function askAI() {
   const input = document.getElementById('ai-input');
   const btn = document.getElementById('ai-send');
   const text = input.value.trim();
-  if (!text) return;
-  input.value = ''; btn.disabled = true;
-  addMsg(text, 'user');
-  history.push({ role: 'user', content: text });
+  if (!text && pendingFiles.length === 0) return;
+
+  const fileNames = pendingFiles.map(f => f.name).join(', ');
+  const userLabel = text
+    ? (pendingFiles.length > 0 ? `${text} 📄 [${fileNames}]` : text)
+    : `📄 [${fileNames}]`;
+
+  input.value = '';
+  btn.disabled = true;
+  addMsg(userLabel, 'user');
   showTyping();
+
   try {
+    let messageContent = [];
+
+    for (const file of pendingFiles) {
+      const isImage = file.type.startsWith('image/');
+      if (isImage) {
+        const base64 = await readFileAsBase64(file);
+        messageContent.push({ type: 'image', source: { type: 'base64', media_type: file.type, data: base64 } });
+      } else {
+        const fileContent = await readFileAsText(file);
+        messageContent.push({ type: 'text', text: `Bestand "${file.name}":\n\`\`\`\n${fileContent}\n\`\`\`` });
+      }
+    }
+
+    if (text) {
+      messageContent.push({ type: 'text', text });
+    } else if (pendingFiles.length > 0) {
+      messageContent.push({ type: 'text', text: `Analyseer ${pendingFiles.length > 1 ? 'deze bestanden' : 'dit bestand'} en geef feedback of uitleg.` });
+    }
+
+    pendingFiles = [];
+    renderFilePreviews();
+
+    const userMessage = {
+      role: 'user',
+      content: messageContent.length === 1 && messageContent[0].type === 'text'
+        ? messageContent[0].text
+        : messageContent
+    };
+    history.push(userMessage);
+
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -470,8 +607,10 @@ async function askAI() {
         messages: history
       })
     });
+
     const data = await res.json();
     removeTyping();
+
     if (data.content && data.content[0]) {
       const reply = data.content[0].text;
       addMsg(reply, 'bot');
@@ -485,6 +624,7 @@ async function askAI() {
     removeTyping();
     addMsg('Verbindingsfout: ' + e.message, 'bot');
   }
+
   btn.disabled = false;
   input.focus();
 }
