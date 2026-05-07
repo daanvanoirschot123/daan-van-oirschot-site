@@ -478,20 +478,9 @@ function removeFile(index) {
 
 function formatResponse(text) {
   const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'position:relative;';
-
-  const copyBtn = document.createElement('button');
-  copyBtn.textContent = '📋 Kopieer';
-  copyBtn.style.cssText = 'position:absolute;top:6px;right:6px;background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.8;z-index:1;';
-  copyBtn.onclick = () => {
-    navigator.clipboard.writeText(text);
-    copyBtn.textContent = '✓ Gekopieerd!';
-    setTimeout(() => copyBtn.textContent = '📋 Kopieer', 2000);
-  };
 
   const div = document.createElement('div');
   div.className = 'ai-bubble bot';
-  div.style.paddingTop = '28px';
 
   const parts = text.split(/(```[\s\S]*?```)/g);
   parts.forEach(part => {
@@ -513,8 +502,17 @@ function formatResponse(text) {
     }
   });
 
-  wrapper.appendChild(copyBtn);
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = '📋 Kopieer';
+  copyBtn.style.cssText = 'display:block;margin:6px 0 0 auto;background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.8;';
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(text);
+    copyBtn.textContent = '✓ Gekopieerd!';
+    setTimeout(() => copyBtn.textContent = '📋 Kopieer', 2000);
+  };
+
   wrapper.appendChild(div);
+  wrapper.appendChild(copyBtn);
   return wrapper;
 }
 
