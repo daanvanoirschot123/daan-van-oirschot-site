@@ -403,7 +403,7 @@ DROP TABLE IF EXISTS studenten;</code></pre>
 </div>
 
 <script>
-const API_KEY = "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";
+const API_URL = "https://daan-van-oirschot-site.vercel.app/api/chat";
 
 const SYSTEM = `Je bent een studieassistent voor een ICT-examen over netwerken (Cisco/VLAN/OSPF), Python en SQL. Antwoord kort en in het Nederlands.`;
 
@@ -460,14 +460,9 @@ async function askAI() {
   history.push({ role: 'user', content: text });
   showTyping();
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(API_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1024,
