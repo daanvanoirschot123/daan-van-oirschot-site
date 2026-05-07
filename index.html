@@ -35,7 +35,7 @@ nav .nav-links a:hover{color:#fff;}
 pre{background:#1e1e2e;color:#cdd6f4;padding:14px 16px;border-radius:8px;font-size:12.5px;overflow-x:auto;margin:10px 0;}
 code{font-family:Consolas,monospace;}
 .warn{background:#fff8e1;border-left:4px solid #f9a825;padding:10px 14px;border-radius:6px;font-size:13px;color:#6d4c00;margin:10px 0;}
-#ai-panel{position:fixed;top:52px;right:16px;width:400px;max-height:580px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
+#ai-panel{position:fixed;top:52px;right:16px;width:420px;max-height:600px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
 #ai-panel.open{display:flex;}
 #ai-header{background:#1a1a2e;padding:12px 16px;color:#fff;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
 #ai-header button{background:none;border:none;color:#aaa;cursor:pointer;font-size:18px;line-height:1;}
@@ -477,8 +477,22 @@ function removeFile(index) {
 }
 
 function formatResponse(text) {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:relative;';
+
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = '📋 Kopieer';
+  copyBtn.style.cssText = 'position:absolute;top:6px;right:6px;background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.8;z-index:1;';
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(text);
+    copyBtn.textContent = '✓ Gekopieerd!';
+    setTimeout(() => copyBtn.textContent = '📋 Kopieer', 2000);
+  };
+
   const div = document.createElement('div');
   div.className = 'ai-bubble bot';
+  div.style.paddingTop = '28px';
+
   const parts = text.split(/(```[\s\S]*?```)/g);
   parts.forEach(part => {
     if (part.startsWith('```')) {
@@ -498,7 +512,10 @@ function formatResponse(text) {
       });
     }
   });
-  return div;
+
+  wrapper.appendChild(copyBtn);
+  wrapper.appendChild(div);
+  return wrapper;
 }
 
 function addMsg(text, role) {
