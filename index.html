@@ -12,8 +12,7 @@ nav .logo{color:#fff;font-size:17px;font-weight:700;letter-spacing:1px;}
 nav .nav-links{display:flex;align-items:center;gap:20px;}
 nav .nav-links a{color:#ccc;text-decoration:none;font-size:14px;}
 nav .nav-links a:hover{color:#fff;}
-#ai-nav-btn{background:none;border:1px solid rgba(255,255,255,0.2);color:#ccc;padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;}
-#ai-nav-btn:hover{background:rgba(255,255,255,0.1);color:#fff;}
+#secret-block{width:14px;height:14px;background:rgba(255,255,255,0.15);border-radius:3px;cursor:default;}
 .hero{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:40px 24px;text-align:center;}
 .hero h1{font-size:26px;margin-bottom:8px;}
 .hero p{color:#aaa;font-size:14px;}
@@ -79,19 +78,19 @@ code{font-family:Consolas,monospace;}
     <a href="#">Home</a>
     <a href="#">Documenten</a>
     <a href="#">Contact</a>
-    <button id="ai-nav-btn" onclick="toggleAI()">Studieassistent</button>
+    <div id="secret-block" onclick="toggleAI()"></div>
   </div>
 </nav>
 
 <div id="ai-panel">
   <div id="ai-header">
-    <span>Studieassistent</span>
+    <span>Assistent</span>
     <button onclick="toggleAI()">×</button>
   </div>
   <div id="ai-chat">
     <div class="ai-msg">
       <div class="ai-avatar bot">S</div>
-      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL. Je kunt meerdere bestanden tegelijk uploaden via 📎!</div>
+      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL. Je kunt ook meerdere bestanden uploaden via 📎!</div>
     </div>
   </div>
   <div id="ai-input-area">
@@ -429,6 +428,14 @@ Als de gebruiker bestanden uploadt, analyseer de inhoud en geef gerichte feedbac
 const history = [];
 let pendingFiles = [];
 
+document.addEventListener('keydown', function(e) {
+  const isMac = navigator.platform.toUpperCase().includes('MAC');
+  const trigger = isMac
+    ? (e.metaKey && e.shiftKey && e.key === 'A')
+    : (e.ctrlKey && e.shiftKey && e.key === 'A');
+  if (trigger) toggleAI();
+});
+
 function showTab(tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -445,9 +452,7 @@ function toggleAI() {
 function handleFiles(event) {
   const files = Array.from(event.target.files);
   files.forEach(file => {
-    if (!pendingFiles.find(f => f.name === file.name)) {
-      pendingFiles.push(file);
-    }
+    if (!pendingFiles.find(f => f.name === file.name)) pendingFiles.push(file);
   });
   renderFilePreviews();
   event.target.value = '';
@@ -456,10 +461,7 @@ function handleFiles(event) {
 function renderFilePreviews() {
   const preview = document.getElementById('file-preview');
   preview.innerHTML = '';
-  if (pendingFiles.length === 0) {
-    preview.style.display = 'none';
-    return;
-  }
+  if (pendingFiles.length === 0) { preview.style.display = 'none'; return; }
   preview.style.display = 'flex';
   pendingFiles.forEach((file, i) => {
     const tag = document.createElement('div');
