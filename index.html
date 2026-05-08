@@ -7,10 +7,10 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:#f0f2f5;color:#222;line-height:1.6;}
-nav{background:#1a1a2e;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+nav{background:#1a1a2e;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 nav .logo{color:#fff;font-size:17px;font-weight:700;letter-spacing:1px;}
-nav .nav-links{display:flex;align-items:center;gap:20px;}
-nav .nav-links a{color:#ccc;text-decoration:none;font-size:14px;}
+nav .nav-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+nav .nav-links a{color:#ccc;text-decoration:none;font-size:13px;}
 nav .nav-links a:hover{color:#fff;}
 #secret-block{width:14px;height:14px;background:rgba(255,255,255,0.15);border-radius:3px;cursor:default;}
 .hero{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:40px 24px;text-align:center;}
@@ -35,12 +35,15 @@ nav .nav-links a:hover{color:#fff;}
 pre{background:#1e1e2e;color:#cdd6f4;padding:14px 16px;border-radius:8px;font-size:12.5px;overflow-x:auto;margin:10px 0;}
 code{font-family:Consolas,monospace;}
 .warn{background:#fff8e1;border-left:4px solid #f9a825;padding:10px 14px;border-radius:6px;font-size:13px;color:#6d4c00;margin:10px 0;}
-#ai-panel{position:fixed;top:52px;right:16px;width:420px;max-height:600px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
+#ai-panel{position:fixed;top:52px;right:16px;width:380px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
 #ai-panel.open{display:flex;}
-#ai-header{background:#1a1a2e;padding:12px 16px;color:#fff;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
-#ai-header button{background:none;border:none;color:#aaa;cursor:pointer;font-size:18px;line-height:1;}
-#ai-header button:hover{color:#fff;}
-#ai-chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9f9f9;}
+#ai-chat{height:200px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9f9f9;transition:height 0.2s;}
+#ai-header{background:#1a1a2e;padding:10px 16px;color:#fff;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+#ai-header span{flex:1;}
+.header-btns{display:flex;gap:6px;align-items:center;}
+.header-btns button{background:none;border:1px solid rgba(255,255,255,0.2);color:#ccc;cursor:pointer;font-size:12px;line-height:1;border-radius:6px;padding:3px 7px;}
+.header-btns button:hover{color:#fff;border-color:#fff;}
+.close-btn{font-size:18px!important;border:none!important;padding:0 4px!important;}
 .ai-msg{display:flex;gap:7px;align-items:flex-start;}
 .ai-msg.user{flex-direction:row-reverse;}
 .ai-avatar{width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
@@ -54,6 +57,10 @@ code{font-family:Consolas,monospace;}
 .ai-bubble p{margin-bottom:6px;}
 .ai-bubble p:last-child{margin-bottom:0;}
 .typing-dot{font-size:12px;color:#999;padding:4px 8px;}
+.copy-btns{display:flex;gap:6px;margin-top:6px;}
+.copy-btns button{background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.85;}
+.copy-btns button:hover{opacity:1;}
+.copy-btns button.code-btn{background:#1a1a2e;}
 #ai-input-area{background:#fff;border-top:1px solid #eee;}
 #file-preview{padding:6px 12px;display:none;flex-wrap:wrap;gap:6px;background:#f0f0ff;}
 .file-tag{display:flex;align-items:center;gap:4px;background:#e0e0ff;border-radius:20px;padding:3px 10px;font-size:12px;color:#333;}
@@ -77,7 +84,9 @@ code{font-family:Consolas,monospace;}
   <div class="nav-links">
     <a href="#">Home</a>
     <a href="#">Documenten</a>
-    <a href="#">Contact</a>
+    <a href="https://1212722.wixsite.com/netacad" target="_blank">NetAcad</a>
+    <a href="https://www.lockedingoons.nl/" target="_blank">LockedInGoons</a>
+    <a href="https://bubbelblub.github.io/cheat-sheet/" target="_blank">Cheat Sheet</a>
     <div id="secret-block" onclick="toggleAI()"></div>
   </div>
 </nav>
@@ -85,12 +94,17 @@ code{font-family:Consolas,monospace;}
 <div id="ai-panel">
   <div id="ai-header">
     <span>Assistent</span>
-    <button onclick="toggleAI()">×</button>
+    <div class="header-btns">
+      <button onclick="resizePanel('small')" title="Klein">▲</button>
+      <button onclick="resizePanel('medium')" title="Normaal">▬</button>
+      <button onclick="resizePanel('large')" title="Groot">▼</button>
+      <button class="close-btn" onclick="toggleAI()">×</button>
+    </div>
   </div>
   <div id="ai-chat">
     <div class="ai-msg">
       <div class="ai-avatar bot">S</div>
-      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL. Je kunt ook meerdere bestanden uploaden via 📎!</div>
+      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python of SQL. Upload bestanden via 📎. Gebruik ▲▬▼ om het venster groter/kleiner te maken!</div>
     </div>
   </div>
   <div id="ai-input-area">
@@ -436,6 +450,13 @@ document.addEventListener('keydown', function(e) {
   if (trigger) toggleAI();
 });
 
+function resizePanel(size) {
+  const chat = document.getElementById('ai-chat');
+  if (size === 'small') chat.style.height = '150px';
+  else if (size === 'medium') chat.style.height = '320px';
+  else if (size === 'large') chat.style.height = '520px';
+}
+
 function showTab(tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -476,9 +497,18 @@ function removeFile(index) {
   renderFilePreviews();
 }
 
+function extractCode(text) {
+  const matches = [];
+  const regex = /```[\w]*\n?([\s\S]*?)```/g;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push(match[1].trim());
+  }
+  return matches.join('\n\n');
+}
+
 function formatResponse(text) {
   const wrapper = document.createElement('div');
-
   const div = document.createElement('div');
   div.className = 'ai-bubble bot';
 
@@ -502,17 +532,33 @@ function formatResponse(text) {
     }
   });
 
+  const btnRow = document.createElement('div');
+  btnRow.className = 'copy-btns';
+
   const copyBtn = document.createElement('button');
-  copyBtn.textContent = '📋 Kopieer';
-  copyBtn.style.cssText = 'display:block;margin:6px auto 0 0;background:#6C63FF;color:#fff;border:none;border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer;opacity:0.8;';
+  copyBtn.textContent = '📋 Kopieer alles';
   copyBtn.onclick = () => {
     navigator.clipboard.writeText(text);
     copyBtn.textContent = '✓ Gekopieerd!';
-    setTimeout(() => copyBtn.textContent = '📋 Kopieer', 2000);
+    setTimeout(() => copyBtn.textContent = '📋 Kopieer alles', 2000);
   };
+  btnRow.appendChild(copyBtn);
+
+  const codeOnly = extractCode(text);
+  if (codeOnly) {
+    const codeBtn = document.createElement('button');
+    codeBtn.className = 'code-btn';
+    codeBtn.textContent = '{ } Kopieer code';
+    codeBtn.onclick = () => {
+      navigator.clipboard.writeText(codeOnly);
+      codeBtn.textContent = '✓ Code gekopieerd!';
+      setTimeout(() => codeBtn.textContent = '{ } Kopieer code', 2000);
+    };
+    btnRow.appendChild(codeBtn);
+  }
 
   wrapper.appendChild(div);
-  wrapper.appendChild(copyBtn);
+  wrapper.appendChild(btnRow);
   return wrapper;
 }
 
@@ -546,109 +592,4 @@ function showTyping() {
 
 function removeTyping() {
   const t = document.getElementById('typing');
-  if (t) t.remove();
-}
-
-async function readFileAsBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-async function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
-}
-
-async function askAI() {
-  const input = document.getElementById('ai-input');
-  const btn = document.getElementById('ai-send');
-  const text = input.value.trim();
-  if (!text && pendingFiles.length === 0) return;
-
-  const fileNames = pendingFiles.map(f => f.name).join(', ');
-  const userLabel = text
-    ? (pendingFiles.length > 0 ? `${text} 📄 [${fileNames}]` : text)
-    : `📄 [${fileNames}]`;
-
-  input.value = '';
-  btn.disabled = true;
-  addMsg(userLabel, 'user');
-  showTyping();
-
-  try {
-    let messageContent = [];
-
-    for (const file of pendingFiles) {
-      const isImage = file.type.startsWith('image/');
-      if (isImage) {
-        const base64 = await readFileAsBase64(file);
-        messageContent.push({ type: 'image', source: { type: 'base64', media_type: file.type, data: base64 } });
-      } else {
-        const fileContent = await readFileAsText(file);
-        messageContent.push({ type: 'text', text: `Bestand "${file.name}":\n\`\`\`\n${fileContent}\n\`\`\`` });
-      }
-    }
-
-    if (text) {
-      messageContent.push({ type: 'text', text });
-    } else if (pendingFiles.length > 0) {
-      messageContent.push({ type: 'text', text: `Analyseer ${pendingFiles.length > 1 ? 'deze bestanden' : 'dit bestand'} en geef feedback of uitleg.` });
-    }
-
-    pendingFiles = [];
-    renderFilePreviews();
-
-    const userMessage = {
-      role: 'user',
-      content: messageContent.length === 1 && messageContent[0].type === 'text'
-        ? messageContent[0].text
-        : messageContent
-    };
-    history.push(userMessage);
-
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4096,
-        system: SYSTEM,
-        messages: history
-      })
-    });
-
-    const data = await res.json();
-    removeTyping();
-
-    if (data.content && data.content[0]) {
-      const reply = data.content[0].text;
-      addMsg(reply, 'bot');
-      history.push({ role: 'assistant', content: reply });
-    } else if (data.error) {
-      addMsg('Fout: ' + data.error.type + ' – ' + data.error.message, 'bot');
-    } else {
-      addMsg('Onbekende fout: ' + JSON.stringify(data), 'bot');
-    }
-  } catch(e) {
-    removeTyping();
-    addMsg('Verbindingsfout: ' + e.message, 'bot');
-  }
-
-  btn.disabled = false;
-  input.focus();
-}
-
-document.getElementById('ai-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') askAI();
-});
-</script>
-</body>
-</html>
+  if (t) t.remov
