@@ -592,4 +592,109 @@ function showTyping() {
 
 function removeTyping() {
   const t = document.getElementById('typing');
-  if (t) t.remov
+  if (t) t.remove();
+}
+
+async function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
+async function askAI() {
+  const input = document.getElementById('ai-input');
+  const btn = document.getElementById('ai-send');
+  const text = input.value.trim();
+  if (!text && pendingFiles.length === 0) return;
+
+  const fileNames = pendingFiles.map(f => f.name).join(', ');
+  const userLabel = text
+    ? (pendingFiles.length > 0 ? `${text} 📄 [${fileNames}]` : text)
+    : `📄 [${fileNames}]`;
+
+  input.value = '';
+  btn.disabled = true;
+  addMsg(userLabel, 'user');
+  showTyping();
+
+  try {
+    let messageContent = [];
+
+    for (const file of pendingFiles) {
+      const isImage = file.type.startsWith('image/');
+      if (isImage) {
+        const base64 = await readFileAsBase64(file);
+        messageContent.push({ type: 'image', source: { type: 'base64', media_type: file.type, data: base64 } });
+      } else {
+        const fileContent = await readFileAsText(file);
+        messageContent.push({ type: 'text', text: `Bestand "${file.name}":\n\`\`\`\n${fileContent}\n\`\`\`` });
+      }
+    }
+
+    if (text) {
+      messageContent.push({ type: 'text', text });
+    } else if (pendingFiles.length > 0) {
+      messageContent.push({ type: 'text', text: `Analyseer ${pendingFiles.length > 1 ? 'deze bestanden' : 'dit bestand'} en geef feedback of uitleg.` });
+    }
+
+    pendingFiles = [];
+    renderFilePreviews();
+
+    const userMessage = {
+      role: 'user',
+      content: messageContent.length === 1 && messageContent[0].type === 'text'
+        ? messageContent[0].text
+        : messageContent
+    };
+    history.push(userMessage);
+
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 4096,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+
+    const data = await res.json();
+    removeTyping();
+
+    if (data.content && data.content[0]) {
+      const reply = data.content[0].text;
+      addMsg(reply, 'bot');
+      history.push({ role: 'assistant', content: reply });
+    } else if (data.error) {
+      addMsg('Fout: ' + data.error.type + ' – ' + data.error.message, 'bot');
+    } else {
+      addMsg('Onbekende fout: ' + JSON.stringify(data), 'bot');
+    }
+  } catch(e) {
+    removeTyping();
+    addMsg('Verbindingsfout: ' + e.message, 'bot');
+  }
+
+  btn.disabled = false;
+  input.focus();
+}
+
+document.getElementById('ai-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') askAI();
+});
+</script>
+</body>
+</html>
