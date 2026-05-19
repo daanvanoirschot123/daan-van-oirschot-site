@@ -35,6 +35,9 @@ nav .nav-links a:hover{color:#fff;}
 pre{background:#1e1e2e;color:#cdd6f4;padding:14px 16px;border-radius:8px;font-size:12.5px;overflow-x:auto;margin:10px 0;}
 code{font-family:Consolas,monospace;}
 .warn{background:#fff8e1;border-left:4px solid #f9a825;padding:10px 14px;border-radius:6px;font-size:13px;color:#6d4c00;margin:10px 0;}
+.success{background:#e8f5e9;border-left:4px solid #43a047;padding:10px 14px;border-radius:6px;font-size:13px;color:#1b5e20;margin:6px 0;}
+.error{background:#ffebee;border-left:4px solid #e53935;padding:10px 14px;border-radius:6px;font-size:13px;color:#7f0000;margin:6px 0;}
+.step-badge{display:inline-block;background:#6C63FF;color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:8px;}
 #ai-panel{position:fixed;top:52px;right:16px;width:380px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
 #ai-panel.open{display:flex;}
 #ai-chat{height:200px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9f9f9;transition:height 0.2s;}
@@ -104,7 +107,7 @@ code{font-family:Consolas,monospace;}
   <div id="ai-chat">
     <div class="ai-msg">
       <div class="ai-avatar bot">S</div>
-      <div class="ai-bubble bot">Hoi! Stel me een vraag over informatie die op de site staat. Gebruik ▲▬▼ om het venster groter/kleiner te maken!</div>
+      <div class="ai-bubble bot">Hoi! Stel me een vraag over netwerken, Python, SQL of het examen stappenplan. Upload bestanden via 📎. Gebruik ▲▬▼ om het venster groter/kleiner te maken!</div>
     </div>
   </div>
   <div id="ai-input-area">
@@ -127,9 +130,12 @@ code{font-family:Consolas,monospace;}
   <button class="tab-btn active" onclick="showTab('netwerk')">Netwerk Arnhem</button>
   <button class="tab-btn" onclick="showTab('python')">Python</button>
   <button class="tab-btn" onclick="showTab('sql')">SQL</button>
+  <button class="tab-btn" onclick="showTab('examen')">📋 Examen Stappenplan</button>
 </div>
 
 <div class="content">
+
+  <!-- NETWERK TAB -->
   <div id="tab-netwerk" class="section active">
     <div class="card">
       <h2>Overzicht Arnhem</h2>
@@ -258,6 +264,7 @@ show vlan brief</code></pre>
     </div>
   </div>
 
+  <!-- PYTHON TAB -->
   <div id="tab-python" class="section">
     <div class="card">
       <h2>Basisconcepten</h2>
@@ -358,6 +365,7 @@ s.stel_voor()</code></pre>
     </div>
   </div>
 
+  <!-- SQL TAB -->
   <div id="tab-sql" class="section">
     <div class="card">
       <h2>SELECT & WHERE</h2>
@@ -425,6 +433,154 @@ DROP TABLE IF EXISTS studenten;</code></pre>
       </ul>
     </div>
   </div>
+
+  <!-- EXAMEN STAPPENPLAN TAB -->
+  <div id="tab-examen" class="section">
+
+    <div class="card">
+      <h2>Voorbereiding</h2>
+      <ul>
+        <li>Open Cisco Packet Tracer met het <strong>.pka</strong> bestand</li>
+        <li>Open Bijlage 1 (netwerk documentatie) in Word</li>
+        <li>Open Bijlage uitwerking in Word</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Opdracht 1: Inventarisatie</h2>
+
+      <div class="step-badge">Stap A – Laptop aansluiten</div>
+      <ol>
+        <li>Sleep <strong>PC</strong> naar canvas</li>
+        <li>Verbind met <strong>Copper Straight-Through</strong> kabel naar <strong>poort 24</strong> van een access switch</li>
+        <li>Klik op PC → <strong>Desktop → IP Configuration:</strong>
+          <ul>
+            <li>IP: kies een vrij adres in het beheer netwerk (VLAN 30)</li>
+            <li>Subnet: kijk in Bijlage 1</li>
+            <li>Gateway: IP van de L3 switch/router</li>
+          </ul>
+        </li>
+      </ol>
+
+      <div class="step-badge" style="margin-top:14px;">Stap B – SSH inloggen + LLDP opvragen</div>
+      <p>Ga naar <strong>Desktop → Command Prompt</strong> en voer op elk device uit:</p>
+      <pre><code>ssh -l [gebruikersnaam] [IP-adres device]
+wachtwoord: [zie Bijlage 1]
+show lldp neighbors
+show interfaces trunk
+exit</code></pre>
+      <h3>Wat je noteert van show lldp neighbors:</h3>
+      <table>
+        <tr><th>Veld</th><th>Betekenis</th></tr>
+        <tr><td>Device ID</td><td>Met welk device ben je verbonden</td></tr>
+        <tr><td>Local Intf</td><td>Jouw eigen interface</td></tr>
+        <tr><td>Port ID</td><td>Interface van het andere device</td></tr>
+      </table>
+      <h3 style="margin-top:10px;">Wat je noteert van show interfaces trunk:</h3>
+      <div class="success">Interface staat in lijst → Trunk</div>
+      <div class="error">Leeg/zwart scherm → Access</div>
+
+      <div class="step-badge" style="margin-top:14px;">Stap C – Inventarisatietabel invullen</div>
+      <p>Elke regel uit <code>show lldp neighbors</code> = één rij in de tabel:</p>
+      <table>
+        <tr><th>Device</th><th>IP-adres</th><th>Interface</th><th>Verbonden met</th><th>Port ID</th><th>Trunk/Access</th></tr>
+        <tr><td><em>van welk device</em></td><td><em>zie Bijlage 1</em></td><td><em>Local Intf</em></td><td><em>Device ID</em></td><td><em>Port ID</em></td><td><em>zie trunk check</em></td></tr>
+      </table>
+
+      <div class="step-badge" style="margin-top:14px;">Stap D – Netwerktekening in Visio</div>
+      <ul>
+        <li>Servers bovenaan → <strong>Core-laag</strong></li>
+        <li>Routers en switches in het midden → <strong>Distribution-laag</strong></li>
+        <li>Bij elke verbinding de <strong>transmissiesnelheid</strong></li>
+        <li>Bij elk device het <strong>IP-adres</strong></li>
+      </ul>
+      <h3>Hoe weet je de snelheid:</h3>
+      <table>
+        <tr><th>Interface begint met</th><th>Snelheid</th></tr>
+        <tr><td>Gig</td><td>1 Gbps</td></tr>
+        <tr><td>Fa</td><td>100 Mbps</td></tr>
+      </table>
+      <pre><code>show interfaces [interface naam]
+-- Zoek naar BW 1000000 Kbit = 1 Gbps
+-- Zoek naar BW 100000 Kbit  = 100 Mbps</code></pre>
+    </div>
+
+    <div class="card">
+      <h2>Opdracht 2: Verificatie en Testen</h2>
+
+      <div class="step-badge">Stap E – Alles in één keer controleren</div>
+      <p>Op elk device uitvoeren:</p>
+      <pre><code>ssh -l [gebruikersnaam] [IP-adres]
+wachtwoord: [zie Bijlage 1]
+enable
+wachtwoord: [zie Bijlage 1]
+show run | include password|transport|ntp|logging|service
+show interfaces trunk
+show version
+show ntp status
+show logging
+exit</code></pre>
+
+      <div class="step-badge" style="margin-top:14px;">Stap F – Wat je ziet en wat het betekent</div>
+
+      <h3>show run | include password|transport|ntp|logging|service</h3>
+      <table>
+        <tr><th>Wat je ziet</th><th>Waarvoor</th><th>Resultaat</th></tr>
+        <tr><td><code>service password-encryption</code></td><td>Wachtwoorden versleuteld</td><td>✅</td></tr>
+        <tr><td>Staat er niet</td><td>Niet versleuteld</td><td>❌ Afwijking</td></tr>
+        <tr><td><code>transport input ssh</code></td><td>Alleen SSH</td><td>✅</td></tr>
+        <tr><td><code>transport input telnet</code></td><td>Telnet aan</td><td>❌ Afwijking</td></tr>
+        <tr><td><code>ntp server [correct IP]</code></td><td>NTP correct</td><td>✅</td></tr>
+        <tr><td>Ander IP of staat er niet</td><td>NTP verkeerd</td><td>❌ Afwijking</td></tr>
+        <tr><td><code>logging [correct IP]</code></td><td>Syslog correct</td><td>✅</td></tr>
+        <tr><td>Ander IP of staat er niet</td><td>Syslog verkeerd</td><td>❌ Afwijking</td></tr>
+      </table>
+
+      <h3 style="margin-top:12px;">show ntp status</h3>
+      <div class="success">Clock is synchronized → ✅</div>
+      <div class="error">Clock is unsynchronized → ❌ Afwijking</div>
+
+      <h3 style="margin-top:12px;">Werkplek PC intranet testen</h3>
+      <ol>
+        <li>Sleep nieuwe <strong>PC</strong> naar canvas</li>
+        <li>Verbind naar access poort van een switch</li>
+        <li>Stel IP in volgens het juiste VLAN subnet</li>
+        <li>Ga naar <strong>Desktop → Web Browser</strong></li>
+        <li>Typ: <code>http://[IP van HTTP server]</code></li>
+      </ol>
+      <div class="success">Pagina laadt → ✅ Werkplek heeft toegang</div>
+      <div class="error">Pagina laadt niet → ❌ Afwijking</div>
+
+      <div class="step-badge" style="margin-top:14px;">Stap G – Verificatietabel invullen</div>
+      <table>
+        <tr><th>Kolom</th><th>Wat je invult</th></tr>
+        <tr><td>Controle Item</td><td>Staat al ingevuld</td></tr>
+        <tr><td>Apparaten</td><td>Staat al ingevuld</td></tr>
+        <tr><td>Welke tools gebruikt</td><td>CLI via SSH / Web Browser</td></tr>
+        <tr><td>Hoe uitgevoerd</td><td><code>show run | include password|transport|ntp|logging|service</code></td></tr>
+        <tr><td>Resultaat</td><td>Wat je hebt gezien</td></tr>
+        <tr><td>Afwijking/advies</td><td>Wat er mis is + hoe je het oplost</td></tr>
+      </table>
+
+      <div class="step-badge" style="margin-top:14px;">Stap H – Afwijking schrijven</div>
+      <div class="success">Als iets correct is: "[Controle item] staat correct geconfigureerd op alle devices"</div>
+      <div class="error">Als er een afwijking is: "[Device] wijkt af — [wat er staat] maar moet [wat het moet zijn] zijn. Advies: [commando om het te fixen]"</div>
+
+      <div class="step-badge" style="margin-top:14px;">Stap I – Fix commando's bij afwijkingen</div>
+      <table>
+        <tr><th>Afwijking</th><th>Fix commando</th></tr>
+        <tr><td>Verkeerde VLANs op trunk</td><td><code>switchport trunk allowed vlan [juiste VLANs]</code></td></tr>
+        <tr><td>Geen enable wachtwoord</td><td><code>enable secret [wachtwoord]</code></td></tr>
+        <tr><td>Verkeerde NTP server</td><td><code>ntp server [correct IP]</code></td></tr>
+        <tr><td>Verkeerde syslog server</td><td><code>logging [correct IP]</code></td></tr>
+        <tr><td>Telnet aan</td><td><code>line vty 0 4</code> dan <code>transport input ssh</code></td></tr>
+        <tr><td>IOS versie verkeerd</td><td><code>copy tftp flash</code></td></tr>
+      </table>
+      <div class="warn">💡 Dit stappenplan werkt voor elk examen ongeacht de IP-adressen of afwijkingen!</div>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
