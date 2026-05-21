@@ -919,6 +919,7 @@ function applyIPs() {
   const core1 = document.getElementById('ip-core-vlan1').value || '10.10.0.2';
   const dns   = document.getElementById('ip-dns').value || '62.36.55.85';
   const vtp   = document.getElementById('vtp-domain').value || 'SOLAR';
+  const printer = document.getElementById('ip-printer').value || '10.10.40.60';
 
   const v1id   = document.getElementById('vlan1-id').value || '30';
   const v1naam = document.getElementById('vlan1-naam').value || 'Productie';
@@ -938,7 +939,11 @@ function applyIPs() {
   const v3net  = document.getElementById('net-vlan50').value || '10.10.50.0';
   const v3excl = v3gw.replace(/\.\d+$/, '.50');
 
-  const config = `enable
+  const config = `
+============================================================
+  CORE SWITCH (Core01_ARN) — Layer 3 / VTP Server
+============================================================
+enable
 configure terminal
 
 ! VTP & VLAN
@@ -954,6 +959,7 @@ vlan ${v3id}
 exit
 
 ! SVI's (Inter-VLAN Routing)
+! LET OP: altijd no shutdown toevoegen!
 ip routing
 
 interface Vlan1
@@ -970,7 +976,8 @@ interface Vlan${v3id}
  no shutdown
 exit
 
-! DHCP
+! DHCP Server
+! LET OP: verwijder eerst oude pools: no ip dhcp pool <naam>
 ip dhcp excluded-address ${v1gw} ${v1excl}
 ip dhcp excluded-address ${v2gw} ${v2excl}
 ip dhcp excluded-address ${v3gw} ${v3excl}
@@ -990,26 +997,28 @@ ip dhcp pool vlan${v3id}
  default-router ${v3gw}
  dns-server ${dns}
 
-! OSPF
+! OSPF & Default Route
 router ospf 1
  network 0.0.0.0 255.255.255.255 area 0
 exit
 
 ip route 0.0.0.0 0.0.0.0 ${rtr}
 
-! Spanning Tree & Trunks
+! Spanning Tree — Core is Root Bridge
 spanning-tree vlan 1,${v1id},${v2id},${v3id} priority 4096
 
+! Trunk poorten naar access switches
 interface range FastEthernet0/1, FastEthernet0/3
  switchport trunk encapsulation dot1q
  switchport mode trunk
 exit
 
+! Access poort naar AP_Gast (VLAN ${v3id})
 interface FastEthernet0/24
  switchport mode access
  switchport access vlan ${v3id}
 
-! ACL 150 Gasten (VLAN ${v3id} mag niet bij interne VLANs)
+! ACL 150 — Gasten mogen NIET bij intern netwerk
 ip access-list extended 150
  deny ip ${v3net} 0.0.0.255 ${v1net} 0.0.0.255
  deny ip ${v3net} 0.0.0.255 ${v2net} 0.0.0.255
@@ -1021,7 +1030,113 @@ ip access-list extended 150
 interface Vlan${v3id}
  ip access-group 150 in
 
-write`;
+write
+
+============================================================
+  SW01-ARN (${v1naam} switch) — VTP Client
+============================================================
+enable
+configure terminal
+hostname SW01-ARN
+
+vtp mode client
+vtp domain ${vtp}
+
+! Trunk naar Core Switch
+interface FastEthernet0/1
+ switchport mode trunk
+exit
+
+! Trunk naar SW02-ARN
+interface FastEthernet0/24
+ switchport mode trunk
+exit
+
+! Access poorten VLAN ${v1id} (${v1naam})
+interface range FastEthernet0/4 - 5
+ switchport mode access
+ switchport access vlan ${v1id}
+exit
+
+write
+
+============================================================
+  SW02-ARN (${v2naam} switch) — VTP Client
+============================================================
+enable
+configure terminal
+hostname SW02-ARN
+
+vtp mode client
+vtp domain ${vtp}
+
+! Trunk naar Core Switch
+interface FastEthernet0/3
+ switchport mode trunk
+exit
+
+! Trunk naar SW01-ARN
+interface FastEthernet0/23
+ switchport mode trunk
+exit
+
+! Access poort VLAN ${v2id} — PC
+interface FastEthernet0/4
+ switchport mode access
+ switchport access vlan ${v2id}
+exit
+
+! Access poort VLAN ${v2id} — AP (Laptop + Printer)
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan ${v2id}
+exit
+
+write
+
+============================================================
+  PRINTER0 — Statisch IP instelling (via GUI Packet Tracer)
+============================================================
+Stap 1: Plaats WMP300N NIC-kaart in uitbreidingsslot van Printer0
+
+Stap 2: Config > Settings:
+  Gateway:    ${v2gw}
+  DNS Server: ${dns}
+
+Stap 3: Config > Wireless0:
+  IP Configuration: Static
+  IP Address:  ${printer}
+  Subnet Mask: 255.255.255.0
+  SSID:        Solar_Arnhem
+  Auth:        WPA2-PSK
+  Wachtwoord:  solar12345
+
+============================================================
+  WIFI ACCESS POINTS
+============================================================
+AP02 (VLAN ${v2id} — intern):
+  SSID:       Solar_Arnhem
+  Auth:       WPA2-PSK
+  Wachtwoord: solar12345
+  Apparaten:  Laptop2, Printer0
+
+AP_Gast (VLAN ${v3id} — gasten):
+  SSID:       Solar_gast
+  Auth:       WPA2-PSK
+  Wachtwoord: welkom123
+  Apparaten:  Laptop_gast
+
+LET OP: Plaats WPC300N NIC in Laptop2 en Laptop_gast!
+
+============================================================
+  VERIFICATIE COMMANDO'S
+============================================================
+ipconfig /renew               ! DHCP testen op PC
+show ip ospf neighbor         ! Status moet FULL zijn
+show interfaces trunk         ! Trunk poorten controleren
+show vlan brief               ! VLAN overzicht
+ping ${printer}         ! Printer bereikbaar?
+show ip dhcp binding          ! Welke IPs uitgedeeld?`;
 
   document.getElementById('eigen-config').textContent = config;
 }
