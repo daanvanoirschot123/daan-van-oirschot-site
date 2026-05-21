@@ -38,6 +38,25 @@ code{font-family:Consolas,monospace;}
 .success{background:#e8f5e9;border-left:4px solid #43a047;padding:10px 14px;border-radius:6px;font-size:13px;color:#1b5e20;margin:6px 0;}
 .error{background:#ffebee;border-left:4px solid #e53935;padding:10px 14px;border-radius:6px;font-size:13px;color:#7f0000;margin:6px 0;}
 .step-badge{display:inline-block;background:#6C63FF;color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:8px;}
+
+/* IP TOGGLE */
+.ip-toggle{display:flex;gap:10px;margin-bottom:20px;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);align-items:center;flex-wrap:wrap;}
+.ip-toggle span{font-size:13px;font-weight:600;color:#444;margin-right:4px;}
+.toggle-btn{padding:7px 18px;border:2px solid #6C63FF;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6C63FF;transition:all 0.2s;}
+.toggle-btn.active{background:#6C63FF;color:#fff;}
+.ip-view{display:none;}
+.ip-view.active{display:block;}
+
+/* IP INPUT VELDEN */
+.ip-input-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.ip-field{display:flex;flex-direction:column;gap:4px;}
+.ip-field label{font-size:12px;color:#666;font-weight:600;}
+.ip-field input{padding:7px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:Consolas,monospace;outline:none;}
+.ip-field input:focus{border-color:#6C63FF;}
+.apply-btn{margin-top:12px;padding:8px 20px;background:#6C63FF;color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;}
+.apply-btn:hover{background:#5A52E0;}
+
+/* AI PANEL */
 #ai-panel{position:fixed;top:52px;right:16px;width:380px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;z-index:999;overflow:hidden;}
 #ai-panel.open{display:flex;}
 #ai-chat{height:200px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9f9f9;transition:height 0.2s;}
@@ -128,6 +147,7 @@ code{font-family:Consolas,monospace;}
 
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('netwerk')">Netwerk Arnhem</button>
+  <button class="tab-btn" onclick="showTab('handleiding')">📘 Handleiding Arnhem</button>
   <button class="tab-btn" onclick="showTab('python')">Python</button>
   <button class="tab-btn" onclick="showTab('sql')">SQL</button>
   <button class="tab-btn" onclick="showTab('examen')">📋 Examen Stappenplan</button>
@@ -261,6 +281,325 @@ interface Vlan50
 show ip ospf neighbor
 ping 10.10.40.60
 show vlan brief</code></pre>
+    </div>
+  </div>
+
+  <!-- HANDLEIDING TAB -->
+  <div id="tab-handleiding" class="section">
+
+    <div class="ip-toggle">
+      <span>Weergave:</span>
+      <button class="toggle-btn active" onclick="switchView('voorbeeld')">📋 Voorbeeld IPs (Arnhem)</button>
+      <button class="toggle-btn" onclick="switchView('eigen')">✏️ Eigen IPs invullen</button>
+    </div>
+
+    <!-- EIGEN IPS INVULFORMULIER -->
+    <div id="view-eigen" class="ip-view">
+      <div class="card">
+        <h2>Vul jouw examen IPs in</h2>
+        <p style="font-size:13px;color:#666;margin-bottom:12px;">Vul de IPs in uit jouw examen bijlage. De configuratie hieronder wordt automatisch aangepast.</p>
+        <div class="ip-input-grid">
+          <div class="ip-field"><label>Router G0/0/1 (beheer)</label><input id="ip-rtr" value="10.10.0.1" placeholder="bijv. 192.168.1.1"/></div>
+          <div class="ip-field"><label>Core Switch VLAN 1</label><input id="ip-core-vlan1" value="10.10.0.2" placeholder="bijv. 192.168.1.2"/></div>
+          <div class="ip-field"><label>DNS Server</label><input id="ip-dns" value="62.36.55.85" placeholder="bijv. 8.8.8.8"/></div>
+          <div class="ip-field"><label>VTP Domain naam</label><input id="vtp-domain" value="SOLAR" placeholder="bijv. BEDRIJF"/></div>
+        </div>
+
+        <p style="font-size:12px;font-weight:700;color:#6C63FF;margin:14px 0 8px;">VLAN 1 — Productie</p>
+        <div class="ip-input-grid">
+          <div class="ip-field"><label>VLAN ID</label><input id="vlan1-id" value="30" placeholder="bijv. 30"/></div>
+          <div class="ip-field"><label>VLAN Naam</label><input id="vlan1-naam" value="Productie" placeholder="bijv. Productie"/></div>
+          <div class="ip-field"><label>Gateway IP</label><input id="ip-vlan30" value="10.10.30.1" placeholder="bijv. 10.20.30.1"/></div>
+          <div class="ip-field"><label>Subnet (network adres)</label><input id="net-vlan30" value="10.10.30.0" placeholder="bijv. 10.20.30.0"/></div>
+        </div>
+
+        <p style="font-size:12px;font-weight:700;color:#6C63FF;margin:14px 0 8px;">VLAN 2 — Marketing</p>
+        <div class="ip-input-grid">
+          <div class="ip-field"><label>VLAN ID</label><input id="vlan2-id" value="40" placeholder="bijv. 40"/></div>
+          <div class="ip-field"><label>VLAN Naam</label><input id="vlan2-naam" value="Marketing" placeholder="bijv. Marketing"/></div>
+          <div class="ip-field"><label>Gateway IP</label><input id="ip-vlan40" value="10.10.40.1" placeholder="bijv. 10.20.40.1"/></div>
+          <div class="ip-field"><label>Subnet (network adres)</label><input id="net-vlan40" value="10.10.40.0" placeholder="bijv. 10.20.40.0"/></div>
+        </div>
+
+        <p style="font-size:12px;font-weight:700;color:#6C63FF;margin:14px 0 8px;">VLAN 3 — Gasten</p>
+        <div class="ip-input-grid">
+          <div class="ip-field"><label>VLAN ID</label><input id="vlan3-id" value="50" placeholder="bijv. 50"/></div>
+          <div class="ip-field"><label>VLAN Naam</label><input id="vlan3-naam" value="Gasten_Wifi" placeholder="bijv. Gasten_Wifi"/></div>
+          <div class="ip-field"><label>Gateway IP</label><input id="ip-vlan50" value="10.10.50.1" placeholder="bijv. 10.20.50.1"/></div>
+          <div class="ip-field"><label>Subnet (network adres)</label><input id="net-vlan50" value="10.10.50.0" placeholder="bijv. 10.20.50.0"/></div>
+        </div>
+
+        <p style="font-size:12px;font-weight:700;color:#6C63FF;margin:14px 0 8px;">Printer</p>
+        <div class="ip-input-grid">
+          <div class="ip-field"><label>Printer IP</label><input id="ip-printer" value="10.10.40.60" placeholder="bijv. 10.20.40.60"/></div>
+        </div>
+        <button class="apply-btn" onclick="applyIPs()">✅ Pas configuratie aan</button>
+      </div>
+
+      <div class="card">
+        <h2>Gegenereerde configuratie Core Switch</h2>
+        <pre id="eigen-config" style="white-space:pre;font-size:12px;"></pre>
+      </div>
+    </div>
+
+    <!-- VOORBEELD IPS -->
+    <div id="view-voorbeeld" class="ip-view active">
+      <div class="card">
+        <h2>Solar Plex – Netwerkconfiguratie Handleiding v2</h2>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;">Filiaal Arnhem · bijgewerkt na praktijktest · Correcties: no shutdown op alle VLAN-interfaces</p>
+        <table>
+          <tr><th>Onderdeel</th><th>Waarde</th></tr>
+          <tr><td>VTP Domain</td><td>SOLAR</td></tr>
+          <tr><td>Core Switch</td><td>Core01_ARN (Layer 3, VTP Server, OSPF, DHCP)</td></tr>
+          <tr><td>Access Switches</td><td>SW01-ARN (Productie VLAN 30) · SW02-ARN (Marketing VLAN 40)</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>IP-Plan Arnhem</h2>
+        <table>
+          <tr><th>Apparaat</th><th>Poort</th><th>IP-adres</th><th>Subnet</th><th>Gateway</th></tr>
+          <tr><td>Rtr_Inet</td><td>G0/0/1</td><td>10.10.0.1</td><td>255.255.255.0</td><td>—</td></tr>
+          <tr><td>Rtr_Inet</td><td>G0/0/2</td><td>86.0.0.2 (dhcp)</td><td>—</td><td>—</td></tr>
+          <tr><td>Rtr_Inet</td><td>Serial0/1/0</td><td>185.90.90.1</td><td>255.255.255.252</td><td>—</td></tr>
+          <tr><td>Core01_ARN</td><td>VLAN 1</td><td>10.10.0.2</td><td>255.255.255.0</td><td>—</td></tr>
+          <tr><td>Core01_ARN</td><td>VLAN 30</td><td>10.10.30.1</td><td>255.255.255.0</td><td>—</td></tr>
+          <tr><td>Core01_ARN</td><td>VLAN 40</td><td>10.10.40.1</td><td>255.255.255.0</td><td>—</td></tr>
+          <tr><td>Core01_ARN</td><td>VLAN 50</td><td>10.10.50.1</td><td>255.255.255.0</td><td>—</td></tr>
+          <tr><td>Printer0</td><td>Wireless0</td><td>10.10.40.60</td><td>255.255.255.0</td><td>10.10.40.1</td></tr>
+        </table>
+        <p style="font-size:12px;color:#888;margin-top:8px;">Alle overige apparaten (PC's, laptops) ontvangen automatisch een IP-adres via DHCP.</p>
+      </div>
+
+      <div class="card">
+        <h2>VLAN & Aansluitingsoverzicht</h2>
+        <table>
+          <tr><th>VLAN ID</th><th>Naam</th><th>Aansluitingen</th></tr>
+          <tr><td>30</td><td>Productie</td><td>SW01-ARN: Fa0/4 (PC4), Fa0/5 (PC5)</td></tr>
+          <tr><td>40</td><td>Marketing</td><td>SW02-ARN: Fa0/4 (PC3), G0/1 (AP02 → Laptop2 + Printer0)</td></tr>
+          <tr><td>50</td><td>Gasten_Wifi</td><td>Core01_ARN: Fa0/24 (AP_Gast → Laptop_gast)</td></tr>
+        </table>
+        <h3 style="margin-top:12px;">Trunk verbindingen</h3>
+        <table>
+          <tr><th>Van</th><th>Poort</th><th>Naar</th><th>Poort</th><th>Type</th></tr>
+          <tr><td>Core01_ARN</td><td>Fa0/1</td><td>SW01-ARN</td><td>Fa0/1</td><td>Trunk</td></tr>
+          <tr><td>Core01_ARN</td><td>Fa0/3</td><td>SW02-ARN</td><td>Fa0/3</td><td>Trunk</td></tr>
+          <tr><td>SW01-ARN</td><td>Fa0/24</td><td>SW02-ARN</td><td>Fa0/23</td><td>Trunk</td></tr>
+        </table>
+        <div class="warn">⚠ Trunk SW01-ARN (Fa0/24) ↔ SW02-ARN (Fa0/23) is verplicht. Zonder deze verbinding kunnen de switches niet met elkaar communiceren.</div>
+      </div>
+
+      <div class="card">
+        <h2>Configuratie Core01_ARN</h2>
+        <h3>Stap 1 – VLAN & VTP</h3>
+        <pre><code>enable
+configure terminal
+
+vtp domain SOLAR
+vtp mode server
+
+vlan 30
+ name Productie
+vlan 40
+ name Marketing
+vlan 50
+ name Gasten_Wifi
+exit</code></pre>
+
+        <h3>Stap 2 – SVI's (Inter-VLAN Routing)</h3>
+        <div class="warn">⚠ Altijd <strong>no shutdown</strong> toevoegen — Cisco zet VLAN-interfaces standaard administratively down.<br>Zonder 'no shutdown' op Vlan1 werkt OSPF niet!</div>
+        <pre><code>ip routing
+
+interface Vlan1
+ ip address 10.10.0.2 255.255.255.0
+ no shutdown
+interface Vlan30
+ ip address 10.10.30.1 255.255.255.0
+ no shutdown
+interface Vlan40
+ ip address 10.10.40.1 255.255.255.0
+ no shutdown
+interface Vlan50
+ ip address 10.10.50.1 255.255.255.0
+ no shutdown
+exit</code></pre>
+
+        <h3>Stap 3 – DHCP Server</h3>
+        <div class="warn">⚠ Verwijder eerst eventuele oude pools: <code>no ip dhcp pool &lt;naam&gt;</code><br>Exclusions .1 t/m .50 zodat printer (10.10.40.60) nooit via DHCP wordt uitgegeven.</div>
+        <pre><code>ip dhcp excluded-address 10.10.30.1 10.10.30.50
+ip dhcp excluded-address 10.10.40.1 10.10.40.50
+ip dhcp excluded-address 10.10.50.1 10.10.50.50
+
+ip dhcp pool vlan30
+ network 10.10.30.0 255.255.255.0
+ default-router 10.10.30.1
+ dns-server 62.36.55.85
+
+ip dhcp pool vlan40
+ network 10.10.40.0 255.255.255.0
+ default-router 10.10.40.1
+ dns-server 62.36.55.85
+
+ip dhcp pool vlan50
+ network 10.10.50.0 255.255.255.0
+ default-router 10.10.50.1
+ dns-server 62.36.55.85</code></pre>
+
+        <h3>Stap 4 – OSPF & Default Route</h3>
+        <pre><code>router ospf 1
+ network 10.0.0.0 0.255.255.255 area 0
+exit
+
+! Route naar buiten (internet via Rtr_Inet)
+ip route 0.0.0.0 0.0.0.0 10.10.0.1</code></pre>
+
+        <h3>Stap 5 – Spanning Tree & Trunk Poorten</h3>
+        <pre><code>spanning-tree vlan 1,30,40,50 priority 4096
+
+interface range FastEthernet0/1, FastEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+exit
+
+! Poort naar AP_Gast (VLAN 50 access)
+interface FastEthernet0/24
+ switchport mode access
+ switchport access vlan 50</code></pre>
+
+        <h3>Stap 6 – ACL 150 (Gasten beveiliging)</h3>
+        <div class="warn">⚠ Alle vijf deny-regels zijn verplicht! De 172.16.x.x regels beschermen het Nijmegen-netwerk.</div>
+        <pre><code>ip access-list extended 150
+ deny ip 10.10.50.0 0.0.0.255 10.10.30.0 0.0.0.255
+ deny ip 10.10.50.0 0.0.0.255 10.10.40.0 0.0.0.255
+ deny ip 10.10.50.0 0.0.0.255 172.16.10.0 0.0.0.255
+ deny ip 10.10.50.0 0.0.0.255 172.16.5.0 0.0.0.255
+ deny ip 10.10.50.0 0.0.0.255 172.16.20.0 0.0.0.255
+ permit ip any any
+
+interface Vlan50
+ ip access-group 150 in</code></pre>
+      </div>
+
+      <div class="card">
+        <h2>Configuratie SW01-ARN (Productie)</h2>
+        <pre><code>enable
+configure terminal
+hostname SW01-ARN
+
+vtp mode client
+vtp domain SOLAR
+
+! Trunk naar Core01_ARN
+interface FastEthernet0/1
+ switchport mode trunk
+exit
+
+! Trunk naar SW02-ARN
+interface FastEthernet0/24
+ switchport mode trunk
+exit
+
+! Access poorten VLAN 30
+interface range FastEthernet0/4 - 5
+ switchport mode access
+ switchport access vlan 30
+exit
+
+write</code></pre>
+      </div>
+
+      <div class="card">
+        <h2>Configuratie SW02-ARN (Marketing)</h2>
+        <pre><code>enable
+configure terminal
+hostname SW02-ARN
+
+vtp mode client
+vtp domain SOLAR
+
+! Trunk naar Core01_ARN
+interface FastEthernet0/3
+ switchport mode trunk
+exit
+
+! Trunk naar SW01-ARN
+interface FastEthernet0/23
+ switchport mode trunk
+exit
+
+! Access poort VLAN 40 (PC3)
+interface FastEthernet0/4
+ switchport mode access
+ switchport access vlan 40
+exit
+
+! Access poort VLAN 40 (AP02 - Laptop2 + Printer0)
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 40
+exit
+
+write</code></pre>
+      </div>
+
+      <div class="card">
+        <h2>Printer0 Installatie</h2>
+        <div class="warn">⚠ Zorg eerst dat de Wireless NIC-kaart (WMP300N) in Printer0 is geplaatst via de uitbreidingsslot in Cisco Packet Tracer.</div>
+        <h3>Config > Settings:</h3>
+        <ul>
+          <li>Gateway: <strong>10.10.40.1</strong></li>
+          <li>DNS Server: <strong>62.36.55.85</strong></li>
+        </ul>
+        <h3>Config > Wireless0:</h3>
+        <ul>
+          <li>IP Configuration: <strong>Static</strong></li>
+          <li>IP Address: <strong>10.10.40.60</strong></li>
+          <li>Subnet Mask: <strong>255.255.255.0</strong></li>
+          <li>SSID: <strong>Solar_Arnhem</strong></li>
+          <li>Authentication: <strong>WPA2-PSK</strong></li>
+          <li>Wachtwoord: <strong>solar12345</strong></li>
+        </ul>
+        <div class="warn">⚠ Vergeet niet WPC300N NIC te plaatsen in Laptop2 en Laptop_gast.</div>
+      </div>
+
+      <div class="card">
+        <h2>WiFi Configuratie</h2>
+        <table>
+          <tr><th>Access Point</th><th>SSID</th><th>Auth</th><th>Wachtwoord</th><th>Apparaten</th></tr>
+          <tr><td>AP02 (VLAN 40)</td><td>Solar_Arnhem</td><td>WPA2-PSK</td><td>solar12345</td><td>Laptop2, Printer0</td></tr>
+          <tr><td>AP_Gast (VLAN 50)</td><td>Solar_gast</td><td>WPA2-PSK</td><td>welkom123</td><td>Laptop_gast</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Verificatie & Testen</h2>
+        <h3>1. DHCP verificatie</h3>
+        <pre><code>ipconfig /renew</code></pre>
+        <p>Verwacht: IP in 10.10.x.x range, DNS 62.36.55.85</p>
+
+        <h3>2. Website bereikbaarheid</h3>
+        <pre><code>www.solar.com
+172.16.5.30   (intranet Nijmegen – PC5 moet hier bij kunnen)</code></pre>
+
+        <h3>3. Cross-site ping (Arnhem ↔ Nijmegen)</h3>
+        <pre><code>ping [IP van PC aan andere kant]</code></pre>
+        <p>Verwacht: pingberichten worden beantwoord (OSPF werkt)</p>
+
+        <h3>4. OSPF verificatie</h3>
+        <pre><code>show ip ospf neighbor</code></pre>
+        <p>Status moet <strong>FULL</strong> zijn voor alle buren.</p>
+
+        <h3>5. ACL testen (Gast beveiliging)</h3>
+        <pre><code>ping [IP PC3 of PC4] vanuit Laptop_gast</code></pre>
+        <div class="success">Laptop_gast → www.solar.com: moet werken (permit ip any any)</div>
+        <div class="error">Laptop_gast → PC3/PC4: moet timeout geven (ACL blokkeert)</div>
+
+        <h3>6. Printer testen</h3>
+        <pre><code>ping 10.10.40.60   (vanuit PC3 Marketing)</code></pre>
+        <div class="success">Verwacht: succesvol – printer bereikbaar binnen VLAN 40</div>
+
+        <div class="warn" style="margin-top:12px;">💾 Vergeet niet op te slaan: <code>write</code></div>
+      </div>
     </div>
   </div>
 
@@ -436,7 +775,6 @@ DROP TABLE IF EXISTS studenten;</code></pre>
 
   <!-- EXAMEN STAPPENPLAN TAB -->
   <div id="tab-examen" class="section">
-
     <div class="card">
       <h2>Voorbereiding</h2>
       <ul>
@@ -445,140 +783,88 @@ DROP TABLE IF EXISTS studenten;</code></pre>
         <li>Open Bijlage uitwerking in Word</li>
       </ul>
     </div>
-
     <div class="card">
       <h2>Opdracht 1: Inventarisatie</h2>
-
       <div class="step-badge">Stap A – Laptop aansluiten</div>
       <ol>
         <li>Sleep <strong>PC</strong> naar canvas</li>
-        <li>Verbind met <strong>Copper Straight-Through</strong> kabel naar <strong>poort 24</strong> van een access switch</li>
+        <li>Verbind met <strong>Copper Straight-Through</strong> naar <strong>poort 24</strong> van een access switch</li>
         <li>Klik op PC → <strong>Desktop → IP Configuration:</strong>
           <ul>
-            <li>IP: kies een vrij adres in het beheer netwerk (VLAN 30)</li>
-            <li>Subnet: kijk in Bijlage 1</li>
+            <li>IP: kies vrij adres in beheer netwerk (VLAN 30)</li>
+            <li>Subnet: zie Bijlage 1</li>
             <li>Gateway: IP van de L3 switch/router</li>
           </ul>
         </li>
       </ol>
-
-      <div class="step-badge" style="margin-top:14px;">Stap B – SSH inloggen + LLDP opvragen</div>
-      <p>Ga naar <strong>Desktop → Command Prompt</strong> en voer op elk device uit:</p>
+      <div class="step-badge" style="margin-top:14px;">Stap B – SSH inloggen + LLDP</div>
       <pre><code>ssh -l [gebruikersnaam] [IP-adres device]
 wachtwoord: [zie Bijlage 1]
 show lldp neighbors
 show interfaces trunk
 exit</code></pre>
-      <h3>Wat je noteert van show lldp neighbors:</h3>
       <table>
         <tr><th>Veld</th><th>Betekenis</th></tr>
-        <tr><td>Device ID</td><td>Met welk device ben je verbonden</td></tr>
+        <tr><td>Device ID</td><td>Met welk device verbonden</td></tr>
         <tr><td>Local Intf</td><td>Jouw eigen interface</td></tr>
         <tr><td>Port ID</td><td>Interface van het andere device</td></tr>
       </table>
-      <h3 style="margin-top:10px;">Wat je noteert van show interfaces trunk:</h3>
-      <div class="success">Interface staat in lijst → Trunk</div>
-      <div class="error">Leeg/zwart scherm → Access</div>
-
-      <div class="step-badge" style="margin-top:14px;">Stap C – Inventarisatietabel invullen</div>
-      <p>Elke regel uit <code>show lldp neighbors</code> = één rij in de tabel:</p>
+      <div class="success" style="margin-top:8px;">Interface in lijst → Trunk</div>
+      <div class="error">Leeg scherm → Access</div>
+      <div class="step-badge" style="margin-top:14px;">Stap C – Inventarisatietabel</div>
       <table>
-        <tr><th>Device</th><th>IP-adres</th><th>Interface</th><th>Verbonden met</th><th>Port ID</th><th>Trunk/Access</th></tr>
-        <tr><td><em>van welk device</em></td><td><em>zie Bijlage 1</em></td><td><em>Local Intf</em></td><td><em>Device ID</em></td><td><em>Port ID</em></td><td><em>zie trunk check</em></td></tr>
+        <tr><th>Device</th><th>IP</th><th>Interface</th><th>Verbonden met</th><th>Port ID</th><th>Trunk/Access</th></tr>
+        <tr><td><em>device naam</em></td><td><em>Bijlage 1</em></td><td><em>Local Intf</em></td><td><em>Device ID</em></td><td><em>Port ID</em></td><td><em>trunk check</em></td></tr>
       </table>
-
-      <div class="step-badge" style="margin-top:14px;">Stap D – Netwerktekening in Visio</div>
+      <div class="step-badge" style="margin-top:14px;">Stap D – Netwerktekening Visio</div>
       <ul>
         <li>Servers bovenaan → <strong>Core-laag</strong></li>
-        <li>Routers en switches in het midden → <strong>Distribution-laag</strong></li>
-        <li>Bij elke verbinding de <strong>transmissiesnelheid</strong></li>
-        <li>Bij elk device het <strong>IP-adres</strong></li>
+        <li>Routers/switches midden → <strong>Distribution-laag</strong></li>
+        <li>Bij elke verbinding transmissiesnelheid + IP per device</li>
       </ul>
-      <h3>Hoe weet je de snelheid:</h3>
-      <table>
+      <table style="margin-top:8px;">
         <tr><th>Interface begint met</th><th>Snelheid</th></tr>
         <tr><td>Gig</td><td>1 Gbps</td></tr>
         <tr><td>Fa</td><td>100 Mbps</td></tr>
       </table>
-      <pre><code>show interfaces [interface naam]
--- Zoek naar BW 1000000 Kbit = 1 Gbps
--- Zoek naar BW 100000 Kbit  = 100 Mbps</code></pre>
     </div>
-
     <div class="card">
       <h2>Opdracht 2: Verificatie en Testen</h2>
-
-      <div class="step-badge">Stap E – Alles in één keer controleren</div>
-      <p>Op elk device uitvoeren:</p>
+      <div class="step-badge">Stap E – Alles controleren</div>
       <pre><code>ssh -l [gebruikersnaam] [IP-adres]
-wachtwoord: [zie Bijlage 1]
 enable
-wachtwoord: [zie Bijlage 1]
 show run | include password|transport|ntp|logging|service
 show interfaces trunk
 show version
 show ntp status
 show logging
 exit</code></pre>
-
-      <div class="step-badge" style="margin-top:14px;">Stap F – Wat je ziet en wat het betekent</div>
-
-      <h3>show run | include password|transport|ntp|logging|service</h3>
+      <div class="step-badge" style="margin-top:14px;">Stap F – Resultaten interpreteren</div>
       <table>
         <tr><th>Wat je ziet</th><th>Waarvoor</th><th>Resultaat</th></tr>
         <tr><td><code>service password-encryption</code></td><td>Wachtwoorden versleuteld</td><td>✅</td></tr>
-        <tr><td>Staat er niet</td><td>Niet versleuteld</td><td>❌ Afwijking</td></tr>
+        <tr><td>Staat er niet</td><td>Niet versleuteld</td><td>❌</td></tr>
         <tr><td><code>transport input ssh</code></td><td>Alleen SSH</td><td>✅</td></tr>
-        <tr><td><code>transport input telnet</code></td><td>Telnet aan</td><td>❌ Afwijking</td></tr>
+        <tr><td><code>transport input telnet</code></td><td>Telnet aan</td><td>❌</td></tr>
         <tr><td><code>ntp server [correct IP]</code></td><td>NTP correct</td><td>✅</td></tr>
-        <tr><td>Ander IP of staat er niet</td><td>NTP verkeerd</td><td>❌ Afwijking</td></tr>
+        <tr><td>Ander/geen IP</td><td>NTP verkeerd</td><td>❌</td></tr>
         <tr><td><code>logging [correct IP]</code></td><td>Syslog correct</td><td>✅</td></tr>
-        <tr><td>Ander IP of staat er niet</td><td>Syslog verkeerd</td><td>❌ Afwijking</td></tr>
+        <tr><td>Ander/geen IP</td><td>Syslog verkeerd</td><td>❌</td></tr>
       </table>
-
-      <h3 style="margin-top:12px;">show ntp status</h3>
-      <div class="success">Clock is synchronized → ✅</div>
+      <div class="success" style="margin-top:8px;">Clock is synchronized → ✅</div>
       <div class="error">Clock is unsynchronized → ❌ Afwijking</div>
-
-      <h3 style="margin-top:12px;">Werkplek PC intranet testen</h3>
-      <ol>
-        <li>Sleep nieuwe <strong>PC</strong> naar canvas</li>
-        <li>Verbind naar access poort van een switch</li>
-        <li>Stel IP in volgens het juiste VLAN subnet</li>
-        <li>Ga naar <strong>Desktop → Web Browser</strong></li>
-        <li>Typ: <code>http://[IP van HTTP server]</code></li>
-      </ol>
-      <div class="success">Pagina laadt → ✅ Werkplek heeft toegang</div>
-      <div class="error">Pagina laadt niet → ❌ Afwijking</div>
-
-      <div class="step-badge" style="margin-top:14px;">Stap G – Verificatietabel invullen</div>
-      <table>
-        <tr><th>Kolom</th><th>Wat je invult</th></tr>
-        <tr><td>Controle Item</td><td>Staat al ingevuld</td></tr>
-        <tr><td>Apparaten</td><td>Staat al ingevuld</td></tr>
-        <tr><td>Welke tools gebruikt</td><td>CLI via SSH / Web Browser</td></tr>
-        <tr><td>Hoe uitgevoerd</td><td><code>show run | include password|transport|ntp|logging|service</code></td></tr>
-        <tr><td>Resultaat</td><td>Wat je hebt gezien</td></tr>
-        <tr><td>Afwijking/advies</td><td>Wat er mis is + hoe je het oplost</td></tr>
-      </table>
-
-      <div class="step-badge" style="margin-top:14px;">Stap H – Afwijking schrijven</div>
-      <div class="success">Als iets correct is: "[Controle item] staat correct geconfigureerd op alle devices"</div>
-      <div class="error">Als er een afwijking is: "[Device] wijkt af — [wat er staat] maar moet [wat het moet zijn] zijn. Advies: [commando om het te fixen]"</div>
-
-      <div class="step-badge" style="margin-top:14px;">Stap I – Fix commando's bij afwijkingen</div>
+      <div class="step-badge" style="margin-top:14px;">Stap I – Fix commando's</div>
       <table>
         <tr><th>Afwijking</th><th>Fix commando</th></tr>
-        <tr><td>Verkeerde VLANs op trunk</td><td><code>switchport trunk allowed vlan [juiste VLANs]</code></td></tr>
+        <tr><td>Verkeerde VLANs trunk</td><td><code>switchport trunk allowed vlan [VLANs]</code></td></tr>
         <tr><td>Geen enable wachtwoord</td><td><code>enable secret [wachtwoord]</code></td></tr>
-        <tr><td>Verkeerde NTP server</td><td><code>ntp server [correct IP]</code></td></tr>
-        <tr><td>Verkeerde syslog server</td><td><code>logging [correct IP]</code></td></tr>
-        <tr><td>Telnet aan</td><td><code>line vty 0 4</code> dan <code>transport input ssh</code></td></tr>
+        <tr><td>Verkeerde NTP</td><td><code>ntp server [correct IP]</code></td></tr>
+        <tr><td>Verkeerde syslog</td><td><code>logging [correct IP]</code></td></tr>
+        <tr><td>Telnet aan</td><td><code>line vty 0 4</code> → <code>transport input ssh</code></td></tr>
         <tr><td>IOS versie verkeerd</td><td><code>copy tftp flash</code></td></tr>
       </table>
-      <div class="warn">💡 Dit stappenplan werkt voor elk examen ongeacht de IP-adressen of afwijkingen!</div>
+      <div class="warn">💡 Dit stappenplan werkt voor elk examen ongeacht de IPs of afwijkingen!</div>
     </div>
-
   </div>
 
 </div>
@@ -620,6 +906,126 @@ function showTab(tab) {
   event.target.classList.add('active');
 }
 
+function switchView(view) {
+  document.querySelectorAll('.ip-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  event.target.classList.add('active');
+  if (view === 'eigen') applyIPs();
+}
+
+function applyIPs() {
+  const rtr   = document.getElementById('ip-rtr').value || '10.10.0.1';
+  const core1 = document.getElementById('ip-core-vlan1').value || '10.10.0.2';
+  const dns   = document.getElementById('ip-dns').value || '62.36.55.85';
+  const vtp   = document.getElementById('vtp-domain').value || 'SOLAR';
+
+  const v1id   = document.getElementById('vlan1-id').value || '30';
+  const v1naam = document.getElementById('vlan1-naam').value || 'Productie';
+  const v1gw   = document.getElementById('ip-vlan30').value || '10.10.30.1';
+  const v1net  = document.getElementById('net-vlan30').value || '10.10.30.0';
+  const v1excl = v1gw.replace(/\.\d+$/, '.50');
+
+  const v2id   = document.getElementById('vlan2-id').value || '40';
+  const v2naam = document.getElementById('vlan2-naam').value || 'Marketing';
+  const v2gw   = document.getElementById('ip-vlan40').value || '10.10.40.1';
+  const v2net  = document.getElementById('net-vlan40').value || '10.10.40.0';
+  const v2excl = v2gw.replace(/\.\d+$/, '.50');
+
+  const v3id   = document.getElementById('vlan3-id').value || '50';
+  const v3naam = document.getElementById('vlan3-naam').value || 'Gasten_Wifi';
+  const v3gw   = document.getElementById('ip-vlan50').value || '10.10.50.1';
+  const v3net  = document.getElementById('net-vlan50').value || '10.10.50.0';
+  const v3excl = v3gw.replace(/\.\d+$/, '.50');
+
+  const config = `enable
+configure terminal
+
+! VTP & VLAN
+vtp domain ${vtp}
+vtp mode server
+
+vlan ${v1id}
+ name ${v1naam}
+vlan ${v2id}
+ name ${v2naam}
+vlan ${v3id}
+ name ${v3naam}
+exit
+
+! SVI's (Inter-VLAN Routing)
+ip routing
+
+interface Vlan1
+ ip address ${core1} 255.255.255.0
+ no shutdown
+interface Vlan${v1id}
+ ip address ${v1gw} 255.255.255.0
+ no shutdown
+interface Vlan${v2id}
+ ip address ${v2gw} 255.255.255.0
+ no shutdown
+interface Vlan${v3id}
+ ip address ${v3gw} 255.255.255.0
+ no shutdown
+exit
+
+! DHCP
+ip dhcp excluded-address ${v1gw} ${v1excl}
+ip dhcp excluded-address ${v2gw} ${v2excl}
+ip dhcp excluded-address ${v3gw} ${v3excl}
+
+ip dhcp pool vlan${v1id}
+ network ${v1net} 255.255.255.0
+ default-router ${v1gw}
+ dns-server ${dns}
+
+ip dhcp pool vlan${v2id}
+ network ${v2net} 255.255.255.0
+ default-router ${v2gw}
+ dns-server ${dns}
+
+ip dhcp pool vlan${v3id}
+ network ${v3net} 255.255.255.0
+ default-router ${v3gw}
+ dns-server ${dns}
+
+! OSPF
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
+exit
+
+ip route 0.0.0.0 0.0.0.0 ${rtr}
+
+! Spanning Tree & Trunks
+spanning-tree vlan 1,${v1id},${v2id},${v3id} priority 4096
+
+interface range FastEthernet0/1, FastEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+exit
+
+interface FastEthernet0/24
+ switchport mode access
+ switchport access vlan ${v3id}
+
+! ACL 150 Gasten (VLAN ${v3id} mag niet bij interne VLANs)
+ip access-list extended 150
+ deny ip ${v3net} 0.0.0.255 ${v1net} 0.0.0.255
+ deny ip ${v3net} 0.0.0.255 ${v2net} 0.0.0.255
+ deny ip ${v3net} 0.0.0.255 172.16.10.0 0.0.0.255
+ deny ip ${v3net} 0.0.0.255 172.16.5.0 0.0.0.255
+ deny ip ${v3net} 0.0.0.255 172.16.20.0 0.0.0.255
+ permit ip any any
+
+interface Vlan${v3id}
+ ip access-group 150 in
+
+write`;
+
+  document.getElementById('eigen-config').textContent = config;
+}
+
 function toggleAI() {
   const panel = document.getElementById('ai-panel');
   panel.classList.toggle('open');
@@ -657,9 +1063,7 @@ function extractCode(text) {
   const matches = [];
   const regex = /```[\w]*\n?([\s\S]*?)```/g;
   let match;
-  while ((match = regex.exec(text)) !== null) {
-    matches.push(match[1].trim());
-  }
+  while ((match = regex.exec(text)) !== null) matches.push(match[1].trim());
   return matches.join('\n\n');
 }
 
@@ -667,7 +1071,6 @@ function formatResponse(text) {
   const wrapper = document.createElement('div');
   const div = document.createElement('div');
   div.className = 'ai-bubble bot';
-
   const parts = text.split(/(```[\s\S]*?```)/g);
   parts.forEach(part => {
     if (part.startsWith('```')) {
@@ -687,32 +1090,20 @@ function formatResponse(text) {
       });
     }
   });
-
   const btnRow = document.createElement('div');
   btnRow.className = 'copy-btns';
-
   const copyBtn = document.createElement('button');
   copyBtn.textContent = '📋 Kopieer alles';
-  copyBtn.onclick = () => {
-    navigator.clipboard.writeText(text);
-    copyBtn.textContent = '✓ Gekopieerd!';
-    setTimeout(() => copyBtn.textContent = '📋 Kopieer alles', 2000);
-  };
+  copyBtn.onclick = () => { navigator.clipboard.writeText(text); copyBtn.textContent = '✓ Gekopieerd!'; setTimeout(() => copyBtn.textContent = '📋 Kopieer alles', 2000); };
   btnRow.appendChild(copyBtn);
-
   const codeOnly = extractCode(text);
   if (codeOnly) {
     const codeBtn = document.createElement('button');
     codeBtn.className = 'code-btn';
     codeBtn.textContent = '{ } Kopieer code';
-    codeBtn.onclick = () => {
-      navigator.clipboard.writeText(codeOnly);
-      codeBtn.textContent = '✓ Code gekopieerd!';
-      setTimeout(() => codeBtn.textContent = '{ } Kopieer code', 2000);
-    };
+    codeBtn.onclick = () => { navigator.clipboard.writeText(codeOnly); codeBtn.textContent = '✓ Code gekopieerd!'; setTimeout(() => codeBtn.textContent = '{ } Kopieer code', 2000); };
     btnRow.appendChild(codeBtn);
   }
-
   wrapper.appendChild(div);
   wrapper.appendChild(btnRow);
   return wrapper;
@@ -726,15 +1117,9 @@ function addMsg(text, role) {
   av.className = 'ai-avatar ' + (role === 'user' ? 'usr' : 'bot');
   av.textContent = role === 'user' ? 'Jij' : 'S';
   let bubble;
-  if (role === 'bot') {
-    bubble = formatResponse(text);
-  } else {
-    bubble = document.createElement('div');
-    bubble.className = 'ai-bubble usr';
-    bubble.textContent = text;
-  }
-  wrap.appendChild(av);
-  wrap.appendChild(bubble);
+  if (role === 'bot') bubble = formatResponse(text);
+  else { bubble = document.createElement('div'); bubble.className = 'ai-bubble usr'; bubble.textContent = text; }
+  wrap.appendChild(av); wrap.appendChild(bubble);
   chat.appendChild(wrap);
   chat.scrollTop = chat.scrollHeight;
 }
@@ -746,27 +1131,14 @@ function showTyping() {
   chat.appendChild(t); chat.scrollTop = chat.scrollHeight;
 }
 
-function removeTyping() {
-  const t = document.getElementById('typing');
-  if (t) t.remove();
-}
+function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
 async function readFileAsBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+  return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result.split(',')[1]); r.onerror = reject; r.readAsDataURL(file); });
 }
 
 async function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
+  return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = reject; r.readAsText(file); });
 }
 
 async function askAI() {
@@ -774,62 +1146,29 @@ async function askAI() {
   const btn = document.getElementById('ai-send');
   const text = input.value.trim();
   if (!text && pendingFiles.length === 0) return;
-
   const fileNames = pendingFiles.map(f => f.name).join(', ');
-  const userLabel = text
-    ? (pendingFiles.length > 0 ? `${text} 📄 [${fileNames}]` : text)
-    : `📄 [${fileNames}]`;
-
-  input.value = '';
-  btn.disabled = true;
-  addMsg(userLabel, 'user');
-  showTyping();
-
+  const userLabel = text ? (pendingFiles.length > 0 ? `${text} 📄 [${fileNames}]` : text) : `📄 [${fileNames}]`;
+  input.value = ''; btn.disabled = true;
+  addMsg(userLabel, 'user'); showTyping();
   try {
     let messageContent = [];
-
     for (const file of pendingFiles) {
-      const isImage = file.type.startsWith('image/');
-      if (isImage) {
+      if (file.type.startsWith('image/')) {
         const base64 = await readFileAsBase64(file);
         messageContent.push({ type: 'image', source: { type: 'base64', media_type: file.type, data: base64 } });
       } else {
-        const fileContent = await readFileAsText(file);
-        messageContent.push({ type: 'text', text: `Bestand "${file.name}":\n\`\`\`\n${fileContent}\n\`\`\`` });
+        const fc = await readFileAsText(file);
+        messageContent.push({ type: 'text', text: `Bestand "${file.name}":\n\`\`\`\n${fc}\n\`\`\`` });
       }
     }
-
-    if (text) {
-      messageContent.push({ type: 'text', text });
-    } else if (pendingFiles.length > 0) {
-      messageContent.push({ type: 'text', text: `Analyseer ${pendingFiles.length > 1 ? 'deze bestanden' : 'dit bestand'} en geef feedback of uitleg.` });
-    }
-
-    pendingFiles = [];
-    renderFilePreviews();
-
-    const userMessage = {
-      role: 'user',
-      content: messageContent.length === 1 && messageContent[0].type === 'text'
-        ? messageContent[0].text
-        : messageContent
-    };
+    if (text) messageContent.push({ type: 'text', text });
+    else if (pendingFiles.length > 0) messageContent.push({ type: 'text', text: `Analyseer ${pendingFiles.length > 1 ? 'deze bestanden' : 'dit bestand'} en geef feedback of uitleg.` });
+    pendingFiles = []; renderFilePreviews();
+    const userMessage = { role: 'user', content: messageContent.length === 1 && messageContent[0].type === 'text' ? messageContent[0].text : messageContent };
     history.push(userMessage);
-
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4096,
-        system: SYSTEM,
-        messages: history
-      })
-    });
-
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 4096, system: SYSTEM, messages: history }) });
     const data = await res.json();
     removeTyping();
-
     if (data.content && data.content[0]) {
       const reply = data.content[0].text;
       addMsg(reply, 'bot');
@@ -839,18 +1178,11 @@ async function askAI() {
     } else {
       addMsg('Onbekende fout: ' + JSON.stringify(data), 'bot');
     }
-  } catch(e) {
-    removeTyping();
-    addMsg('Verbindingsfout: ' + e.message, 'bot');
-  }
-
-  btn.disabled = false;
-  input.focus();
+  } catch(e) { removeTyping(); addMsg('Verbindingsfout: ' + e.message, 'bot'); }
+  btn.disabled = false; input.focus();
 }
 
-document.getElementById('ai-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') askAI();
-});
+document.getElementById('ai-input').addEventListener('keydown', e => { if (e.key === 'Enter') askAI(); });
 </script>
 </body>
 </html>
