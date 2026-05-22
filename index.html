@@ -816,12 +816,57 @@ exit</code></pre>
         <tr><th>Device</th><th>IP</th><th>Interface</th><th>Verbonden met</th><th>Port ID</th><th>Trunk/Access</th></tr>
         <tr><td><em>device naam</em></td><td><em>Bijlage 1</em></td><td><em>Local Intf</em></td><td><em>Device ID</em></td><td><em>Port ID</em></td><td><em>trunk check</em></td></tr>
       </table>
-      <div class="step-badge" style="margin-top:14px;">Stap D – Netwerktekening Visio</div>
+      <div class="step-badge" style="margin-top:14px;">Stap D – Poorten & verbindingen opzoeken</div>
+      <p style="font-size:13px;color:#444;margin-bottom:8px;">Doe dit op de Core Switch en elke access switch. Gebruik deze commando's in volgorde:</p>
+      <h3>1. LLDP neighbors detail — alles in één overzicht</h3>
+      <pre><code>show lldp neighbors detail</code></pre>
+      <p>Geeft je per verbinding:</p>
+      <ul>
+        <li>Welke <strong>poort</strong> verbonden is met welk device</li>
+        <li>Het <strong>IP-adres</strong> van de buur</li>
+        <li>De <strong>interface naam</strong> aan beide kanten</li>
+      </ul>
+
+      <h3 style="margin-top:10px;">2. IP interface brief — poorten status</h3>
+      <pre><code>show ip interface brief</code></pre>
+      <p>Geeft je:</p>
+      <ul>
+        <li>Alle poorten die <strong>UP</strong> zijn</li>
+        <li>Welke poorten een IP hebben (= SVI's)</li>
+        <li>Snel overzicht welke poorten actief zijn</li>
+      </ul>
+
+      <h3 style="margin-top:10px;">3. Snelheid per poort opzoeken</h3>
+      <pre><code>show interfaces FastEthernet0/1</code></pre>
+      <table style="margin-top:6px;">
+        <tr><th>Wat je ziet</th><th>Snelheid</th></tr>
+        <tr><td>BW 1000000 Kbit</td><td>1 Gbps</td></tr>
+        <tr><td>BW 100000 Kbit</td><td>100 Mbps</td></tr>
+      </table>
+
+      <div class="step-badge" style="margin-top:14px;">Stap D2 – Poort shutdown trucje (bij twijfel)</div>
+      <p style="font-size:13px;color:#444;margin-bottom:8px;">Weet je niet zeker wat er op een poort zit? Zet hem even uit en kijk wat wegvalt:</p>
+      <pre><code>! Stap 1: poort uitzetten op Core Switch
+interface FastEthernet0/1
+ shutdown
+
+! Stap 2: kijk op de buurswitch wat er down gaat
+show ip interface brief
+! De poort die nu "down" is = was verbonden met Fa0/1
+
+! Stap 3: poort weer aanzetten!
+interface FastEthernet0/1
+ no shutdown</code></pre>
+      <div class="warn">⚠ Vergeet nooit <strong>no shutdown</strong> daarna — anders blijft de verbinding uit!</div>
+
+      <div class="step-badge" style="margin-top:14px;">Stap D3 – Netwerktekening maken in Visio</div>
       <ul>
         <li>Servers bovenaan → <strong>Core-laag</strong></li>
         <li>Routers/switches midden → <strong>Distribution-laag</strong></li>
-        <li>Bij elke verbinding transmissiesnelheid + IP per device</li>
+        <li>Bij elke verbinding de <strong>transmissiesnelheid</strong></li>
+        <li>Bij elk device het <strong>IP-adres</strong></li>
       </ul>
+      <p style="font-size:13px;color:#666;margin-top:8px;">Gebruik de info uit stap D (lldp + ip int brief) om alle verbindingen en IPs in te vullen.</p>
       <table style="margin-top:8px;">
         <tr><th>Interface begint met</th><th>Snelheid</th></tr>
         <tr><td>Gig</td><td>1 Gbps</td></tr>
