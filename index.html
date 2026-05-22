@@ -1326,7 +1326,7 @@ async function askAI() {
     pendingFiles = []; renderFilePreviews();
     const userMessage = { role: 'user', content: messageContent.length === 1 && messageContent[0].type === 'text' ? messageContent[0].text : messageContent };
     history.push(userMessage);
-    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 4096, system: SYSTEM, messages: history }) });
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-sonnet-4-5-20251001', max_tokens: 4096, system: SYSTEM, messages: history }) });
     const data = await res.json();
     removeTyping();
     if (data.content && data.content[0]) {
